@@ -30,6 +30,6 @@
         <appender-ref ref="FILE"/>
     </root>
 
-    <logger name="com.kelton.kkwalkingrdm" level="debug"/>
+    <logger name="com.kelton.walkingmanrdm" level="debug"/>
 
 </configuration>

@@ -1,4 +1,4 @@
-package com.kelton.kkwalkingrdm.common;
+package com.kelton.walkingmanrdm.common;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +33,8 @@ public class DataManager {
         try {
             Connection conn = DriverManager.getConnection(protocol + dbName + ";create=true");
             Statement statement = conn.createStatement();
-            // statement.execute("create table t_user(id int primary key, name varchar(20))");
+            statement.execute("create table t_user(id int primary key, name varchar(20))");
+            statement.execute("insert into t_user(id , name) values(1,'zzk')");
             ResultSet resultSet = statement.executeQuery("select * from t_user");
             while (resultSet.next()) {
                 System.out.println(resultSet.getInt(1));

@@ -1,4 +1,4 @@
-package com.kelton.kkwalkingrdm;
+package com.kelton.walkingmanrdm;
 
 import lombok.extern.slf4j.Slf4j;
 
