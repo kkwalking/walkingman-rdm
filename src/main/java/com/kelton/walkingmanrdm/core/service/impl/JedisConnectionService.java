@@ -38,8 +38,9 @@ public class JedisConnectionService implements ConnectionService {
     }
 
     @Override
-    public RedisConnectionInfo getConnect(Object id) {
-        return null;
+    public RedisConnectionInfo getById(Integer id) {
+        var sql = "select * from rdm_connect_info where id ="+ id;
+        return SqlUtils.INSTANT.querySql(sql).stream().map(this::toConnectionInfo).findAny().orElse(null);
     }
 
     @Override
@@ -50,12 +51,15 @@ public class JedisConnectionService implements ConnectionService {
 
     @Override
     public void update(RedisConnectionInfo connectInfo) {
+        String updateSql = buildUpdateSql(connectInfo);
+        SqlUtils.INSTANT.exec(updateSql);
 
     }
 
     @Override
-    public void delete(Object id) {
-
+    public void deleteById(Integer id) {
+        String sql = "delete from rdm_connect_info where id =".concat(id.toString());
+        SqlUtils.INSTANT.exec(sql);
     }
 
     @Override

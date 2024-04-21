@@ -4,6 +4,7 @@ import com.kelton.walkingmanrdm.common.util.SqlUtils;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.ConnectionService;
 import com.kelton.walkingmanrdm.core.service.impl.JedisConnectionService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,19 +16,44 @@ import java.util.List;
  */
 public class ConnectionServiceTest {
 
+    @BeforeEach
+    public void init() {
+        SqlUtils.init();
+    }
+
 
     @Test
-    public void connect() {
-
-        SqlUtils.init();
+    public void save() {
 
         RedisConnectionInfo redisConnectionInfo = new RedisConnectionInfo();
-        redisConnectionInfo.host("127.0.0.1").port(6379).password("0754zzk").database(0).title("本地连接");
-
+        redisConnectionInfo.host("127.0.0.1").port(6379).password("aaa").database(0).title("本地连接");
 
         ConnectionService.INSTANT.save(redisConnectionInfo);
         List<RedisConnectionInfo> allConnectList = ConnectionService.INSTANT.getAllConnectList();
         System.out.println(allConnectList);
 
+    }
+
+    @Test
+    public void update() {
+        RedisConnectionInfo redisConnectionInfo = new RedisConnectionInfo();
+        redisConnectionInfo.id(1).password("aaa");
+
+        ConnectionService.INSTANT.update(redisConnectionInfo);
+        List<RedisConnectionInfo> allConnectList = ConnectionService.INSTANT.getAllConnectList();
+        System.out.println(allConnectList);
+    }
+
+    @Test
+    public void del() {
+        ConnectionService.INSTANT.deleteById(1);
+        List<RedisConnectionInfo> allConnectList = ConnectionService.INSTANT.getAllConnectList();
+        System.out.println(allConnectList);
+    }
+
+    @Test
+    public void getById() {
+        RedisConnectionInfo connectionInfo = ConnectionService.INSTANT.getById(1);
+        System.out.println(connectionInfo);
     }
 }
