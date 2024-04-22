@@ -14,8 +14,6 @@ public class JedisBasicCommand implements RedisBasicCommand {
 
     // 用于获取Jedis连接实例，后续考虑加入连接池
     private Jedis getConnection(RedisConnectionInfo connectionInfo) {
-        // 根据 connectionInfo 内的详细信息建立连接
-        // 这里只是一个示例，您需要根据实际情况来创建和管理 Jedis 实例
         Jedis jedis = new Jedis(connectionInfo.host(), connectionInfo.port());
         if (StringUtils.isNotBlank(connectionInfo.password())) {
             jedis.auth(connectionInfo.password());
