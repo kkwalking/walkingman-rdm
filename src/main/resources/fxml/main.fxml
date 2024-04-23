@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="660.0" prefWidth="880.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="660.0" prefWidth="880.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kelton.walkingmanrdm.core.controller.MainController">
     <center>
     </center>
     <left>
-        <AnchorPane id="left-main-pane" style="-fx-background-color: #00fff1;" styleClass="left-main-pane" BorderPane.alignment="CENTER">
+        <AnchorPane id="left-main-pane" style="-fx-background-color: #f09608;" styleClass="left-main-pane" BorderPane.alignment="CENTER">
             <children>
             <Label prefHeight="30.0" text=" Connection Zone" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                 <VBox alignment="TOP_CENTER" layoutY="33.0" prefHeight="587.0" prefWidth="165.0" spacing="5.0" styleClass="box-nav" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0">
@@ -22,9 +22,9 @@
         </AnchorPane>
     </left>
    <bottom>
-      <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #ff10cc;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #009688;" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" prefWidth="170.0" text="New Connection" />
+            <Button mnemonicParsing="false" onAction="#handleNewConnection" prefWidth="170.0" text="New Connection" />
             <Label text="状态栏信息" HBox.hgrow="ALWAYS" />
          </children>
          <BorderPane.margin>
