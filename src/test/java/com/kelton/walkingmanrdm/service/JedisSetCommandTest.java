@@ -1,6 +1,7 @@
 package com.kelton.walkingmanrdm.service;
 
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
+import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
 import com.kelton.walkingmanrdm.core.service.impl.JedisBasicCommand;
 import com.kelton.walkingmanrdm.core.service.impl.JedisSetCommand;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,12 +34,16 @@ public class JedisSetCommandTest {
     public void testSadd() {
         Long result = command.sadd(connectionInfo, baseKey, "member4");
         assertEquals(Long.valueOf(1), result);
+
+        RedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
     }
 
     @Test
     public void testScard() {
         Long size = command.scard(connectionInfo, baseKey);
-        assertEquals(Long.valueOf(3), size);
+        assertEquals(Long.valueOf(4), size);
+
+        RedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
     }
 
     @Test
@@ -49,6 +54,9 @@ public class JedisSetCommandTest {
 
         assertTrue(diff.contains("member2"));
         assertTrue(diff.contains("member3"));
+
+        RedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
+        RedisBasicCommand.INSTANT.del(connectionInfo, otherKey);
     }
 
     @Test
@@ -62,6 +70,8 @@ public class JedisSetCommandTest {
         assertTrue(result.contains("member2"));
         assertTrue(result.contains("member3"));
 
+        RedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
+
     }
 
     @Test
@@ -74,6 +84,7 @@ public class JedisSetCommandTest {
         assertTrue(inter.contains("member2"));
         assertFalse(inter.contains("member3"));
 
+        RedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
         JedisBasicCommand.INSTANT.del(connectionInfo, otherKey);
     }
 
@@ -112,7 +123,7 @@ public class JedisSetCommandTest {
         List<Boolean> isMembers = command.smismember(connectionInfo, baseKey, "member1", "member4");
 
         assertTrue(isMembers.get(0));
-        assertTrue(isMembers.get(1));
+        assertFalse(isMembers.get(1));
     }
 
     @Test
@@ -124,41 +135,55 @@ public class JedisSetCommandTest {
         assertEquals(Long.valueOf(1), result);
         Set<String> membersDest = command.smembers(connectionInfo, destinationKey);
         assertTrue(membersDest.contains("member2"));
+        assertTrue(membersDest.contains("member1"));
 
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
         JedisBasicCommand.INSTANT.del(connectionInfo, destinationKey);
     }
 
     @Test
     public void testSpop() {
         String popped = command.spop(connectionInfo, baseKey);
+        System.out.println(popped);
         assertNotNull(popped);
 
         Set<String> members = command.smembers(connectionInfo, baseKey);
         assertFalse(members.contains(popped));
+
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
     }
 
     @Test
     public void testSpopWithCount() {
         Set<String> popped = command.spop(connectionInfo, baseKey, 2);
         assertEquals(2, popped.size());
+
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
     }
 
     @Test
     public void testSrandmember() {
         String member = command.srandmember(connectionInfo, baseKey);
+        System.out.println(member);
         assertNotNull(member);
+
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
     }
 
     @Test
     public void testSrandmemberWithCount() {
         List<String> members = command.srandmember(connectionInfo, baseKey, 2);
         assertEquals(2, members.size());
+
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
     }
 
     @Test
     public void testSrem() {
         Long removed = command.srem(connectionInfo, baseKey, "member1", "member2");
         assertEquals(Long.valueOf(2), removed);
+
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
     }
 
     @Test
@@ -172,27 +197,43 @@ public class JedisSetCommandTest {
         assertTrue(union.contains("member3"));
         assertTrue(union.contains("member4"));
 
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
         JedisBasicCommand.INSTANT.del(connectionInfo, otherKey);
     }
 
     @Test
     public void testSscan() {
         ScanResult<String> scanResult = command.sscan(connectionInfo, baseKey, "0");
+        System.out.println(scanResult.getResult());
         assertNotNull(scanResult);
         assertTrue(scanResult.getResult().size() > 0);
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
     }
 
     @Test
     public void testSscanWithCount() {
         ScanResult<String> scanResult = command.sscan(connectionInfo, baseKey, "0", 2);
+        System.out.println(scanResult.getResult());
         assertNotNull(scanResult);
         assertTrue(scanResult.getResult().size() > 0);
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
     }
 
     @Test
     public void testSscanWithPattern() {
         ScanResult<String> scanResult = command.sscan(connectionInfo, baseKey, "0", "member?");
+        System.out.println(scanResult.getResult());
         assertNotNull(scanResult);
         assertTrue(scanResult.getResult().size() > 0);
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
+    }
+
+    @Test
+    public void testSscanWithPatternAndCount() {
+        ScanResult<String> scanResult = command.sscan(connectionInfo, baseKey, "0", "member?", 100);
+        System.out.println(scanResult.getResult());
+        assertNotNull(scanResult);
+        assertTrue(scanResult.getResult().size() > 0);
+        JedisBasicCommand.INSTANT.del(connectionInfo, baseKey);
     }
 }

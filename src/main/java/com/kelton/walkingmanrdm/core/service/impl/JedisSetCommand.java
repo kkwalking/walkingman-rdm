@@ -7,6 +7,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.ScanParams;
 import redis.clients.jedis.resps.ScanResult;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -83,9 +84,18 @@ public class JedisSetCommand implements RedisSetCommand {
 
     @Override
     public List<Boolean> smismember(RedisConnectionInfo connectionInfo, String key, String... members) {
-        try (Jedis jedis = getConnection(connectionInfo)) {
-            return jedis.smismember(key, members);
+        if(members == null || members.length == 0) {
+            return new ArrayList<>();
         }
+        ArrayList<Boolean> booleans = new ArrayList<>(members.length);
+
+        try (Jedis jedis = getConnection(connectionInfo)) {
+            for (String member : members) {
+                boolean isMember = jedis.sismember(key, member);
+                booleans.add(isMember);
+            }
+        }
+        return booleans;
     }
 
     @Override
@@ -155,6 +165,13 @@ public class JedisSetCommand implements RedisSetCommand {
     public ScanResult<String> sscan(RedisConnectionInfo connectionInfo, String key, String cursor, String pattern) {
         try (Jedis jedis = getConnection(connectionInfo)) {
             return jedis.sscan(key, cursor, new ScanParams().match(pattern));
+        }
+    }
+
+    @Override
+    public ScanResult<String> sscan(RedisConnectionInfo connectionInfo, String key, String cursor, String pattern, int count) {
+        try (Jedis jedis = getConnection(connectionInfo)) {
+            return jedis.sscan(key, cursor, new ScanParams().match(pattern).count(count));
         }
     }
 }

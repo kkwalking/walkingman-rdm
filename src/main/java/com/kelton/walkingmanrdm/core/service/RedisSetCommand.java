@@ -23,6 +23,14 @@ public interface RedisSetCommand {
 
     Set<String> smembers(RedisConnectionInfo connectionInfo, String key);
 
+    /**
+     * Available since: 6.2.0
+     * could not use directly in redis which version is before 6.2.0
+     * @param connectionInfo
+     * @param key
+     * @param members
+     * @return
+     */
     List<Boolean> smismember(RedisConnectionInfo connectionInfo, String key, String... members);
 
     Long smove(RedisConnectionInfo connectionInfo, String source, String destination, String member);
@@ -44,4 +52,6 @@ public interface RedisSetCommand {
     ScanResult<String> sscan(RedisConnectionInfo connectionInfo, String key, String cursor, int count);
 
     ScanResult<String> sscan(RedisConnectionInfo connectionInfo, String key, String cursor, String pattern);
+
+    ScanResult<String> sscan(RedisConnectionInfo connectionInfo, String key, String cursor, String pattern, int count);
 }
