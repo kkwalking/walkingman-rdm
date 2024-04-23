@@ -1,8 +1,8 @@
 package com.kelton.walkingmanrdm.core.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.impl.JedisConnectionService;
-import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +38,7 @@ public interface ConnectionService {
         boolean isFirstColumn = true;
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("update rdm_connect_info ");
-        if (StringUtils.isNotBlank(connInfo.title())) {
+        if (StrUtil.isNotBlank(connInfo.title())) {
             if (isFirstColumn) {
                 sqlBuilder.append("set ");
                 sqlBuilder.append(String.format("title='%s'",connInfo.title()));
@@ -47,7 +47,7 @@ public interface ConnectionService {
                 sqlBuilder.append(String.format(",title='%s'",connInfo.title()));
             }
         }
-        if (StringUtils.isNotBlank(connInfo.host())) {
+        if (StrUtil.isNotBlank(connInfo.host())) {
             if (isFirstColumn) {
                 sqlBuilder.append("set ");
                 sqlBuilder.append(String.format("host='%s'",connInfo.host()));
@@ -65,7 +65,7 @@ public interface ConnectionService {
                 sqlBuilder.append(String.format(",port='%s'",connInfo.port()));
             }
         }
-        if (StringUtils.isNotBlank(connInfo.username())) {
+        if (StrUtil.isNotBlank(connInfo.username())) {
             if (isFirstColumn) {
                 sqlBuilder.append("set ");
                 sqlBuilder.append(String.format("username='%s'",connInfo.username()));
@@ -74,7 +74,7 @@ public interface ConnectionService {
                 sqlBuilder.append(String.format(",username='%s'",connInfo.username()));
             }
         }
-        if (StringUtils.isNotBlank(connInfo.password())) {
+        if (StrUtil.isNotBlank(connInfo.password())) {
             if (isFirstColumn) {
                 sqlBuilder.append("set ");
                 sqlBuilder.append(String.format("password='%s'",connInfo.password()));
@@ -93,15 +93,15 @@ public interface ConnectionService {
                 "title" +
                 ", " +"host" +
                 ", " +"port" +
-                (StringUtils.isNotBlank(connInfo.username()) ? ", username" : "") +
-                (StringUtils.isNotBlank(connInfo.password()) ? ", password" : "") +
+                (StrUtil.isNotBlank(connInfo.username()) ? ", username" : "") +
+                (StrUtil.isNotBlank(connInfo.password()) ? ", password" : "") +
                 ") " +
                 "values(" +
                 "'" + connInfo.title() + "'" +
                 ",'" + connInfo.host() + "'" +
                 "," + connInfo.port() +
-                (StringUtils.isNotBlank(connInfo.username()) ? ",'" + connInfo.username() + "'" : "") +
-                (StringUtils.isNotBlank(connInfo.password()) ? ",'" + connInfo.password() + "'" : "") +
+                (StrUtil.isNotBlank(connInfo.username()) ? ",'" + connInfo.username() + "'" : "") +
+                (StrUtil.isNotBlank(connInfo.password()) ? ",'" + connInfo.password() + "'" : "") +
                 ")";
     }
 }

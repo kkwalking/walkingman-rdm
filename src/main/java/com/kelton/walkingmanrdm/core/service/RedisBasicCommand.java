@@ -1,8 +1,8 @@
 package com.kelton.walkingmanrdm.core.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.impl.JedisBasicCommand;
-import org.apache.commons.lang.StringUtils;
 import redis.clients.jedis.params.ScanParams;
 import redis.clients.jedis.resps.ScanResult;
 
@@ -67,7 +67,7 @@ public interface RedisBasicCommand {
     default Map<String, Object> strToMap(String str) {
         Map<String, Object> result = new HashMap<>();
         for (String s : str.split("\r\n")) {
-            if (!StringUtils.startsWith(s, "#") && StringUtils.isNotBlank(s)) {
+            if (!StrUtil.startWith(s, "#") && StrUtil.isNotBlank(s)) {
                 String[] v = s.split(":");
                 if (v.length > 1) {
                     result.put(v[0], v[1]);

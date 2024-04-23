@@ -1,8 +1,8 @@
 package com.kelton.walkingmanrdm.core.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.RedisHashCommand;
-import org.apache.commons.lang.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.ScanParams;
 import redis.clients.jedis.resps.ScanResult;
@@ -10,14 +10,13 @@ import redis.clients.jedis.resps.ScanResult;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class JedisHashCommand implements RedisHashCommand {
 
     // 用于获取Jedis连接实例，后续考虑加入连接池
     private Jedis getConnection(RedisConnectionInfo connectionInfo) {
         Jedis jedis = new Jedis(connectionInfo.host(), connectionInfo.port());
-        if (StringUtils.isNotBlank(connectionInfo.password())) {
+        if (StrUtil.isNotBlank(connectionInfo.password())) {
             jedis.auth(connectionInfo.password());
         }
         return jedis;
