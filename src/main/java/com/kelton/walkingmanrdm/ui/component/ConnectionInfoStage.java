@@ -5,6 +5,7 @@ import com.kelton.walkingmanrdm.common.util.SqlUtils;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.ConnectionService;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
+import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,12 +13,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.util.Objects;
 
 /**
  * @Author zhouzekun
@@ -31,11 +36,23 @@ public class ConnectionInfoStage extends Stage {
     private TextField portField;
     private PasswordField passField;
 
+    private Label promptLabel;
+
+    private boolean promptIsPlay;
+
 
     public ConnectionInfoStage() {
 
         // 顶部label
-        Label topLabel = new Label("Redis Connection Details");
+        // Label topLabel = new Label("Redis Connection Details");
+
+        // 提示Label初始化
+        promptLabel = new Label();
+        promptLabel.setTextFill(Color.RED);
+        promptLabel.setVisible(false);
+        promptLabel.setMaxWidth(Double.MAX_VALUE);
+        promptLabel.setAlignment(Pos.CENTER);
+
 
 
         // 中间连接信息区域
@@ -106,23 +123,30 @@ public class ConnectionInfoStage extends Stage {
         bottomHBox.setSpacing(30);
         bottomHBox.setAlignment(Pos.CENTER);
 
+        // 在按钮上方添加提示Label
+        VBox buttonAndPromptLayout = new VBox(10); // 间距为10的垂直容器
+        buttonAndPromptLayout.getChildren().addAll(promptLabel, bottomHBox);
+        buttonAndPromptLayout.setAlignment(Pos.CENTER);
+
         // 将控件添加到布局容器
         VBox layout = new VBox(10); // 10为元素间的间距
-        layout.getChildren().addAll(topLabel, middlePane , bottomHBox);
+        layout.getChildren().addAll(middlePane , buttonAndPromptLayout);
         layout.setAlignment(Pos.CENTER);
 
         // 设置并显示窗口
         Scene scene = new Scene(layout, 300, 250); // 这里设置新窗口的大小
         this.setScene(scene);
-        this.setTitle("New Connection");
+        this.setTitle("New Connection Info");
+        this.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/img/logo.png")).toExternalForm()));
 
 //        点击事件处理
         saveBtn.setOnMouseClicked(event -> {
-            RedisConnectionInfo connInfo = createConnInfo();
+
             String checkRequired = checkRequired();
             if (StrUtil.isNotBlank(checkRequired)) {
                 showFillRequiredInfoPrompt(checkRequired);
             } else {
+                RedisConnectionInfo connInfo = createConnInfo();
                 saveConnInfo(connInfo);
                 this.close();
             }
@@ -169,7 +193,11 @@ public class ConnectionInfoStage extends Stage {
         String password = passField.getText();
 
         RedisConnectionInfo redisConnectionInfo = new RedisConnectionInfo();
-        redisConnectionInfo.title(name).host(host).password(password).port(Integer.valueOf(port));
+        redisConnectionInfo.title(name).host(host).password(password);
+        if (StrUtil.isNotBlank(port)) {
+            redisConnectionInfo.port(Integer.valueOf(port));
+        }
+
         return redisConnectionInfo;
     }
 
@@ -204,6 +232,25 @@ public class ConnectionInfoStage extends Stage {
     }
 
     private void showFillRequiredInfoPrompt(String prompt) {
+        if (promptIsPlay) {
+            return;
+        }
+        promptLabel.setText(prompt);
+        // 显示提示
+        promptLabel.setVisible(true);
+        promptLabel.setOpacity(1);
 
+        // 创建渐变消失动画
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), promptLabel);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setDelay(Duration.seconds(1)); // 1秒后开始消失
+        promptIsPlay = true;
+        fadeOut.play();
+
+        fadeOut.setOnFinished(event -> {
+            promptLabel.setVisible(false);
+            promptIsPlay = false;
+        }); // 动画完成后不显示
     }
 }
