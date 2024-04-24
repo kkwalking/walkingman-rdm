@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="660.0" prefWidth="880.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kelton.walkingmanrdm.core.controller.MainController">
+<BorderPane prefHeight="660.0" prefWidth="880.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kelton.walkingmanrdm.ui.controller.MainController">
     <center>
     </center>
     <left>

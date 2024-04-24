@@ -14,6 +14,8 @@ public interface RedisBasicCommand {
 
     RedisBasicCommand INSTANT = new JedisBasicCommand();
 
+    public boolean testConnect(RedisConnectionInfo connectionInfo);
+
     String flushdb(RedisConnectionInfo connectInfo);
 
     String flushall(RedisConnectionInfo connectInfo);

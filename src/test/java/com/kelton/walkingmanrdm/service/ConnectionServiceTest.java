@@ -56,4 +56,10 @@ public class ConnectionServiceTest {
         RedisConnectionInfo connectionInfo = ConnectionService.INSTANT.getById(1);
         System.out.println(connectionInfo);
     }
+
+    @Test
+    public void getAll() {
+        List<RedisConnectionInfo> allConnectList = ConnectionService.INSTANT.getAllConnectList();
+        System.out.println(allConnectList);
+    }
 }

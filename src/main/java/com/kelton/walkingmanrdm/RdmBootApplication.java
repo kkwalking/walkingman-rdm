@@ -1,5 +1,6 @@
 package com.kelton.walkingmanrdm;
 
+import com.kelton.walkingmanrdm.common.util.SqlUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,8 @@ public class RdmBootApplication extends Application {
     private Scene scene;
 
     public static void main(String[] args) {
+        System.out.println("初始化数据库");
+        SqlUtils.init();
         launch();
 
     }

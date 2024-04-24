@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.params.ScanParams;
 import redis.clients.jedis.resps.ScanResult;
 
@@ -19,6 +20,24 @@ public class JedisBasicCommand implements RedisBasicCommand {
             jedis.auth(connectionInfo.password());
         }
         return jedis;
+    }
+
+    @Override
+    public boolean testConnect(RedisConnectionInfo connectionInfo) {
+        try ( Jedis jedis = new Jedis(connectionInfo.host(), connectionInfo.port())){
+            if (StrUtil.isNotBlank(connectionInfo.password())) {
+                jedis.auth(connectionInfo.password());
+            }
+        } catch (Exception e) {
+            if (e instanceof JedisConnectionException) {
+                System.out.println("连接redis失败");
+                return false;
+            }
+            System.out.println("其他异常");
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     @Override

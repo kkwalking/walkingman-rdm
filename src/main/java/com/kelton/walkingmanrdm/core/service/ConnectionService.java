@@ -59,10 +59,10 @@ public interface ConnectionService {
         if (!Objects.isNull(connInfo.port())) {
             if (isFirstColumn) {
                 sqlBuilder.append("set ");
-                sqlBuilder.append(String.format("port='%s'",connInfo.port()));
+                sqlBuilder.append(String.format("port=%s",connInfo.port()));
                 isFirstColumn = false;
             } else {
-                sqlBuilder.append(String.format(",port='%s'",connInfo.port()));
+                sqlBuilder.append(String.format(",port=%s",connInfo.port()));
             }
         }
         if (StrUtil.isNotBlank(connInfo.username())) {
