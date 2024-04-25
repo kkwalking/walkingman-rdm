@@ -1,4 +1,4 @@
-open module com.zzk.filehelper {
+open module com.kelton.walkingmanrdm {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.slf4j;
@@ -12,4 +12,5 @@ open module com.zzk.filehelper {
     requires redis.clients.jedis;
 
     exports com.kelton.walkingmanrdm;
+    exports com.kelton.walkingmanrdm.core.model;
 }
