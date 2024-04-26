@@ -7,7 +7,9 @@ import com.kelton.walkingmanrdm.ui.component.ConnectionInfoStage;
 import com.kelton.walkingmanrdm.ui.component.RedisConnectionCell;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.*;
@@ -21,7 +23,10 @@ import java.util.List;
  */
 public class MainPane extends BorderPane {
 
-    private ListView<RedisConnectInfoProp> listView;
+    public static final double CELL_HEIGHT = 30.0;
+
+    private HBox listViewContainer;
+
 
     private HBox header;
 
@@ -73,33 +78,43 @@ public class MainPane extends BorderPane {
 
     private void refreshConnectionInfoList() {
         List<RedisConnectionInfo> connectionList = fetchConnectionFromDatabase();
-        listView.getItems().clear();
-        listView.getItems().addAll(RedisConnectionInfo.convertToPropList(connectionList));
+        listViewContainer.getChildren().remove(1);
+        ConnectionListView<RedisConnectInfoProp> newListView =
+                new ConnectionListView<>(FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)), CELL_HEIGHT*4, CELL_HEIGHT*10, CELL_HEIGHT);
+        listViewContainer.getChildren().add(1,newListView);
+        newListView.setCellFactory(param -> new RedisConnectionCell(tabPane));
+        newListView.refreshHeight();
+        // 设置ListView占据HBox宽度的50%
+        newListView.prefWidthProperty().bind(listViewContainer.widthProperty().multiply(0.5));
+
     }
 
     private VBox createContent() {
+
         VBox content = new VBox();
         content.setSpacing(5); // 设置节点之间的间距
-
-        List<RedisConnectionInfo> connectionList = fetchConnectionFromDatabase();
-
-        double cellHeight = 29.0;
-        listView =
-                new ConnectionListView<>(FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)), 0, 300, cellHeight);
-        listView.setCellFactory(param -> new RedisConnectionCell(tabPane));
-
-
-        // 设置ListView的高度为 item数量 * cell高度 + 边距
-        listView.setPrefHeight(connectionList.size() * cellHeight + 2 * content.getSpacing());
-
-
         Region leftSpace = new Region();  // 左侧空间
         Region rightSpace = new Region(); // 右侧空间
         HBox.setHgrow(leftSpace, Priority.ALWAYS);  // 左侧空间吸收额外空间
         HBox.setHgrow(rightSpace, Priority.ALWAYS); // 右侧空间吸收额外空间
-        HBox listViewContainer = new HBox(leftSpace, listView, rightSpace);
-        // 设置ListView占据HBox宽度的50%
-        listView.prefWidthProperty().bind(listViewContainer.widthProperty().multiply(0.5));
+
+        List<RedisConnectionInfo> connectionList = fetchConnectionFromDatabase();
+
+        if (connectionList.size() > 0) {
+            ListView<RedisConnectInfoProp> listView =
+                    new ConnectionListView<>(FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)), CELL_HEIGHT*4, CELL_HEIGHT*10, CELL_HEIGHT);
+            listView.setCellFactory(param -> new RedisConnectionCell(tabPane));
+            listView.setPrefHeight(connectionList.size() * CELL_HEIGHT + 2 * content.getSpacing());
+            // 设置ListView占据HBox宽度的50%
+            listView.prefWidthProperty().bind(listViewContainer.widthProperty().multiply(0.5));
+            listViewContainer = new HBox(leftSpace, listView, rightSpace);
+        } else {
+            Label promptNewConnLabel = new Label("点击右侧新建Redis连接~");
+            listViewContainer = new HBox(leftSpace, promptNewConnLabel, rightSpace);
+        }
+
+        listViewContainer.setMinHeight(300);
+        listViewContainer.setFillHeight(false);
 
         content.getChildren().add(listViewContainer); // 将ListView添加到内容区域
 

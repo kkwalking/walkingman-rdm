@@ -7,6 +7,7 @@ import com.kelton.walkingmanrdm.ui.component.ConnectionInfoStage;
 import com.kelton.walkingmanrdm.ui.test.RedisKeyBrowser;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -18,6 +19,9 @@ import javafx.scene.layout.Region;
 import java.util.List;
 
 public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
+
+    private static final int HEIGHT = 30;
+
     private HBox hbox = new HBox();
 
     private Label nameLabel = new Label("");
@@ -48,15 +52,18 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
         });
 
         hbox.getChildren().addAll(nameLabel, spacer, editButton, deleteButton); // 添加到HBox
+        setPrefHeight(HEIGHT);
+        setMaxHeight(HEIGHT);
+        setMinHeight(HEIGHT);
     }
 
     @Override
     protected void updateItem(RedisConnectInfoProp item, boolean empty) {
         super.updateItem(item, empty);
 
-        setText(null);  // No text in label of super class
+        setText(null);
         if (empty) {
-            setGraphic(null); // Don't display anything
+            setGraphic(null);
         } else {
             // 设置文本为连接名称
             nameLabel.setText(item.title().get());
@@ -71,7 +78,7 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
     }
     
     private void editConnection(RedisConnectInfoProp connection) {
-        ConnectionInfoStage connectionInfoStage = new ConnectionInfoStage(connection);
+        ConnectionInfoStage connectionInfoStage = new ConnectionInfoStage(connection, null);
         connectionInfoStage.show();
         connectionInfoStage.setOnHidden(event -> {
             getListView().refresh();
@@ -81,10 +88,7 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
     private void deleteConnection(RedisConnectInfoProp connection) {
         ConnectionService.INSTANT.deleteById(connection.id().get());
         // 重新提取数据，更新ListView
-        List<RedisConnectionInfo> connectionList = ConnectionService.INSTANT.getAllConnectList();
-        List<RedisConnectInfoProp> props = RedisConnectionInfo.convertToPropList(connectionList);
-        getListView().getItems().clear();
-        getListView().getItems().addAll(props);
+        getListView().getItems().remove(connection);
     }
 
 

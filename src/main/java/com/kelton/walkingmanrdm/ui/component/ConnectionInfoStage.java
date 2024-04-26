@@ -10,10 +10,7 @@ import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -48,13 +45,12 @@ public class ConnectionInfoStage extends Stage {
 
     private boolean promptIsPlay;
 
-    public ConnectionInfoStage(RedisConnectInfoProp connectionInfo) {
-        initLayout();
+    private ListView<RedisConnectInfoProp> listView;
+
+    public ConnectionInfoStage(RedisConnectInfoProp connectionInfo, ListView<RedisConnectInfoProp> listView) {
+        this();
+        this.listView = listView;
         id = connectionInfo.id().getValue();
-//        nameField.setText(connectionInfo.title().getValue());
-//        hostField.setText(connectionInfo.host().getValue());
-//        portField.setText(connectionInfo.port().getValue());
-//        passField.setText(connectionInfo.password().getValue());
 
         // 建立双向绑定
         nameField.textProperty().bindBidirectional(connectionInfo.title());
@@ -63,10 +59,14 @@ public class ConnectionInfoStage extends Stage {
         passField.textProperty().bindBidirectional(connectionInfo.password());
     }
 
+    public ConnectionInfoStage(ListView<RedisConnectInfoProp> listView) {
+        this();
+        this.listView = listView;
+    }
+
 
     public ConnectionInfoStage() {
         initLayout();
-
     }
 
     private void initLayout() {
