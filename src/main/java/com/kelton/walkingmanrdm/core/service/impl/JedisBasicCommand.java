@@ -28,6 +28,7 @@ public class JedisBasicCommand implements RedisBasicCommand {
             if (StrUtil.isNotBlank(connectionInfo.password())) {
                 jedis.auth(connectionInfo.password());
             }
+            jedis.connect();
         } catch (Exception e) {
             if (e instanceof JedisConnectionException) {
                 System.out.println("连接redis失败");

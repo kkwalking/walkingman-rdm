@@ -2,6 +2,7 @@ package com.kelton.walkingmanrdm.ui.component;
 
 import cn.hutool.core.util.StrUtil;
 import com.kelton.walkingmanrdm.common.util.SqlUtils;
+import com.kelton.walkingmanrdm.core.model.RedisConnectInfoProp;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.ConnectionService;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
@@ -15,6 +16,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -30,6 +33,11 @@ import java.util.Objects;
  */
 public class ConnectionInfoStage extends Stage {
 
+    /**
+     * 根据该字段来判断是更新还是新增redis连接
+     */
+    private Integer id;
+
     // 添加字段来持有你的输入控件的引用
     private TextField nameField;
     private TextField hostField;
@@ -40,19 +48,34 @@ public class ConnectionInfoStage extends Stage {
 
     private boolean promptIsPlay;
 
+    public ConnectionInfoStage(RedisConnectInfoProp connectionInfo) {
+        initLayout();
+        id = connectionInfo.id().getValue();
+//        nameField.setText(connectionInfo.title().getValue());
+//        hostField.setText(connectionInfo.host().getValue());
+//        portField.setText(connectionInfo.port().getValue());
+//        passField.setText(connectionInfo.password().getValue());
+
+        // 建立双向绑定
+        nameField.textProperty().bindBidirectional(connectionInfo.title());
+        hostField.textProperty().bindBidirectional(connectionInfo.host());
+        portField.textProperty().bindBidirectional(connectionInfo.port());
+        passField.textProperty().bindBidirectional(connectionInfo.password());
+    }
+
 
     public ConnectionInfoStage() {
+        initLayout();
 
-        // 顶部label
-        // Label topLabel = new Label("Redis Connection Details");
+    }
+
+    private void initLayout() {
 
         // 提示Label初始化
         promptLabel = new Label();
-        promptLabel.setTextFill(Color.RED);
         promptLabel.setVisible(false);
         promptLabel.setMaxWidth(Double.MAX_VALUE);
         promptLabel.setAlignment(Pos.CENTER);
-
 
 
         // 中间连接信息区域
@@ -117,10 +140,12 @@ public class ConnectionInfoStage extends Stage {
 
 
         // 底部按钮区域
-        Button connectBtn = new Button("Connect");
-        Button saveBtn = new Button("Save");
-        HBox bottomHBox = new HBox(saveBtn, connectBtn);
-        bottomHBox.setSpacing(30);
+        Button connectBtn = new Button("测试连接");
+        Button saveBtn = new Button("保存");
+        Region spacingReg = new Region();
+        HBox bottomHBox = new HBox(connectBtn,spacingReg, saveBtn);
+        HBox.setHgrow(spacingReg, Priority.ALWAYS);
+        bottomHBox.setPadding(new Insets(0,30,15,30));
         bottomHBox.setAlignment(Pos.CENTER);
 
         // 在按钮上方添加提示Label
@@ -144,7 +169,7 @@ public class ConnectionInfoStage extends Stage {
 
             String checkRequired = checkRequired();
             if (StrUtil.isNotBlank(checkRequired)) {
-                showFillRequiredInfoPrompt(checkRequired);
+                showFillRequiredInfoPrompt(checkRequired, PromptType.WARN);
             } else {
                 RedisConnectionInfo connInfo = createConnInfo();
                 saveConnInfo(connInfo);
@@ -155,12 +180,11 @@ public class ConnectionInfoStage extends Stage {
             RedisConnectionInfo connInfo = createConnInfo();
             String checkRequired = checkRequired();
             if (StrUtil.isNotBlank(checkRequired)) {
-                showFillRequiredInfoPrompt(checkRequired);
+                showFillRequiredInfoPrompt(checkRequired, PromptType.WARN);
             } else {
                 testConnInfo(connInfo);
             }
         });
-
     }
 
     /**
@@ -176,14 +200,21 @@ public class ConnectionInfoStage extends Stage {
 
     private void testConnInfo(RedisConnectionInfo connInfo) {
         if (RedisBasicCommand.INSTANT.testConnect(connInfo)) {
-            System.out.println("连接成功！");
+            // todo 改动这里，添加连接失败提示
+            showFillRequiredInfoPrompt("连接成功", PromptType.SUCCESS);
         } else {
-            System.out.println("连接失败");
+            showFillRequiredInfoPrompt("连接失败", PromptType.WARN);
         }
     }
 
     private void saveConnInfo(RedisConnectionInfo connInfo) {
-        SqlUtils.INSTANT.exec(ConnectionService.INSTANT.buildInsertSql(connInfo));
+        if (connInfo.id() != null) {
+            // update redis connection info
+            ConnectionService.INSTANT.update(connInfo);
+        } else  {
+            // insert a new redis connection info
+            ConnectionService.INSTANT.save(connInfo);
+        }
     }
 
     private RedisConnectionInfo createConnInfo() {
@@ -193,7 +224,7 @@ public class ConnectionInfoStage extends Stage {
         String password = passField.getText();
 
         RedisConnectionInfo redisConnectionInfo = new RedisConnectionInfo();
-        redisConnectionInfo.title(name).host(host).password(password);
+        redisConnectionInfo.id(id).title(name).host(host).password(password);
         if (StrUtil.isNotBlank(port)) {
             redisConnectionInfo.port(Integer.valueOf(port));
         }
@@ -231,11 +262,16 @@ public class ConnectionInfoStage extends Stage {
         return sb.toString();
     }
 
-    private void showFillRequiredInfoPrompt(String prompt) {
+    private void showFillRequiredInfoPrompt(String prompt, PromptType type) {
         if (promptIsPlay) {
             return;
         }
         promptLabel.setText(prompt);
+        if (type == PromptType.SUCCESS) {
+            promptLabel.setTextFill(Color.GREEN);
+        } else {
+            promptLabel.setTextFill(Color.RED);
+        }
         // 显示提示
         promptLabel.setVisible(true);
         promptLabel.setOpacity(1);
@@ -252,5 +288,10 @@ public class ConnectionInfoStage extends Stage {
             promptLabel.setVisible(false);
             promptIsPlay = false;
         }); // 动画完成后不显示
+    }
+
+    enum PromptType {
+        SUCCESS,
+        WARN
     }
 }

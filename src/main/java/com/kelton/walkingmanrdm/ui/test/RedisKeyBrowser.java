@@ -1,4 +1,4 @@
-package com.kelton.walkingmanrdm.ui;
+package com.kelton.walkingmanrdm.ui.test;
 
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
@@ -25,45 +25,9 @@ public class RedisKeyBrowser extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
-//         RedisConnectionInfo redisConnectionInfo = new RedisConnectionInfo();
-//         redisConnectionInfo.host("127.0.0.1").port(6379).password("0754zzk");
-//         Set<String> keys = RedisBasicCommand.INSTANT.keys(redisConnectionInfo, "*");
-//
-//         // 创建根节点
-//         TreeItem<String> rootNode = new TreeItem<>("Redis Keys");
-//         rootNode.setExpanded(true);  // 默认展开根节点
-//
-//         // 模拟从Redis读取的key集合
-// //        String[] keys = {"alice:name", "alice:age", "kelton:address", "kelton:school"};
-//
-//         for (String key : keys) {
-//             String[] parts = key.split(":");
-//             addKeyToTree(parts, rootNode);
-//         }
-//         // 创建TreeView
-//         TreeView<String> treeView = new TreeView<>(rootNode);
-//
-//         treeView.setOnMouseClicked(event -> {
-//             if (event.getClickCount() == 2) { // 双击检测
-//                 TreeItem<String> currentItemSelected = treeView.getSelectionModel().getSelectedItem();
-//                 if (currentItemSelected != null && currentItemSelected.isLeaf()) { // 是叶子节点
-//                     String key = buildFullKeyPath(currentItemSelected, rootNode); // 传递根节点参数
-//                     String value = RedisStringCommand.INSTANT.get(redisConnectionInfo, key);
-//                     valueTextArea.setText(value);
-//                 }
-//             }
-//         });
-//
-//         // 创建用于展示value的TextArea
-//         valueTextArea = new TextArea();
-//         valueTextArea.setEditable(false);
-//
-//         // 使用BorderPane作为主布局
-//         BorderPane borderPane = new BorderPane();
-//         borderPane.setLeft(treeView); // TreeView放在左侧
-//         borderPane.setCenter(valueTextArea); // TextArea放在中间展示value
-        BorderPane content = createContent();
+        RedisConnectionInfo redisConnectionInfo = new RedisConnectionInfo();
+        redisConnectionInfo.host("127.0.0.1").port(6379).password("0754zzk");
+        BorderPane content = createContent(redisConnectionInfo);
         Scene scene = new Scene(content, 600, 400);
         primaryStage.setTitle("Redis Key Browser");
         primaryStage.setScene(scene);
@@ -103,13 +67,11 @@ public class RedisKeyBrowser extends Application {
     }
 
     // 此方法将创建并返回包含UI控件的BorderPane
-    public BorderPane createContent() {
+    public BorderPane createContent(RedisConnectionInfo connectionInfo) {
         valueTextArea = new TextArea();
         valueTextArea.setEditable(false);
 
-        RedisConnectionInfo redisConnectionInfo = new RedisConnectionInfo();
-        redisConnectionInfo.host("127.0.0.1").port(6379).password("0754zzk");
-        Set<String> keys = RedisBasicCommand.INSTANT.keys(redisConnectionInfo, "*");
+        Set<String> keys = RedisBasicCommand.INSTANT.keys(connectionInfo, "*");
 
         // 创建根节点
         TreeItem<String> rootNode = new TreeItem<>("Redis Keys");
@@ -127,7 +89,7 @@ public class RedisKeyBrowser extends Application {
                 TreeItem<String> item = treeView.getSelectionModel().getSelectedItem();
                 if (item != null && item.isLeaf()) {
                     String key = buildFullKeyPath(item, treeView.getRoot());
-                    String value = RedisStringCommand.INSTANT.get(redisConnectionInfo, key);
+                    String value = RedisStringCommand.INSTANT.get(connectionInfo, key);
                     valueTextArea.setText(value);
                 }
             }
