@@ -5,3 +5,25 @@
     -base-emphasize-color: #009688;
 
 }
+
+.list-view {
+    -fx-background-insets: 0; /* 去除默认边距 */
+    -fx-background-color: white; /* 设置ListView的背景色 */
+    -fx-background-radius: 5; /* ListView的圆角半径 */
+    -fx-border-radius: 5; /* ListView的边框圆角半径，如果设置了边框的话 */
+}
+
+.list-cell {
+    -fx-border-color: transparent; /* 隐藏单元格边框 */
+    -fx-padding: 3px; /* 或者根据需要设定内边距 */
+}
+
+.list-cell:filled {
+    -fx-background-color: transparent; /* 设置列表项背景色为透明或其他颜色 */
+    -fx-background-insets: 0, 1, 2; /* 用于调整背景和边框填充 */
+    -fx-background-radius: 5; /* 列表项的圆角半径 */
+}
+
+.list-cell:filled:selected, .list-cell:filled:selected:focused {
+    -fx-background-color: #009688; /* 指定选中项的背景颜色 */
+}

@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 
 import java.util.List;
 
@@ -36,25 +37,31 @@ public class MainPane extends BorderPane {
         this.tabPane = tabPane;
         setTop(header); // 设置头部区域
         setCenter(content); // 设置内容区域
+
+        // 加载CSS样式文件
+        getStylesheets().add(getClass().getResource("/css/mainPane.css").toExternalForm());
     }
 
     private HBox createHeader() {
         HBox header = new HBox();
-        Button newBtn = new Button("新增连接");
+        Button newBtn = new Button("+ 新增连接");
         newBtn.setOnAction(event -> {
             // 实现打开一个对话框来添加新的Redis连接，并保存到数据库
             ConnectionInfoStage connectionInfoStage = new ConnectionInfoStage();
-            connectionInfoStage.show();
-            connectionInfoStage.setOnHidden(e -> {
-                refreshConnectionInfoList();
-            });
+            // 设置为模态窗口
+            connectionInfoStage.initOwner(this.getScene().getWindow()); // 获取当前主窗口作为父窗口
+            connectionInfoStage.initModality(Modality.APPLICATION_MODAL); // 设置模态类型
+
+            connectionInfoStage.showAndWait(); // 显示模态窗口并等待关闭前不允许用户交互
+            refreshConnectionInfoList();
         });
-        newBtn.setStyle("-fx-background-color:#009688;-fx-text-fill: white;");
+        newBtn.setPrefSize(100,30);
+        newBtn.setStyle("-fx-background-color:#009688;-fx-text-fill: white;-fx-font-size: 15;");
         newBtn.setOnMouseEntered(e-> {
-            newBtn.setStyle("-fx-background-color:#036c5f;-fx-text-fill: white;");
+            newBtn.setStyle("-fx-background-color:#036c5f;-fx-text-fill: white;-fx-font-size: 15;");
         });
         newBtn.setOnMouseExited(e-> {
-            newBtn.setStyle("-fx-background-color:#009688;-fx-text-fill: white;");
+            newBtn.setStyle("-fx-background-color:#009688;-fx-text-fill: white;-fx-font-size: 15;");
         });
 
         Region spaceReg = new Region();
@@ -66,7 +73,8 @@ public class MainPane extends BorderPane {
 
     private void refreshConnectionInfoList() {
         List<RedisConnectionInfo> connectionList = fetchConnectionFromDatabase();
-        listView.setItems(FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)));
+        listView.getItems().clear();
+        listView.getItems().addAll(RedisConnectionInfo.convertToPropList(connectionList));
     }
 
     private VBox createContent() {
@@ -75,13 +83,25 @@ public class MainPane extends BorderPane {
 
         List<RedisConnectionInfo> connectionList = fetchConnectionFromDatabase();
 
-        // 实现一个ListView，每个Item代表一个Redis连接
-        // 使用自定义的CellFactory来添加编辑和删除按钮
+        double cellHeight = 29.0;
         listView =
-                new ListView<>(FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)));
+                new ConnectionListView<>(FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)), 0, 300, cellHeight);
         listView.setCellFactory(param -> new RedisConnectionCell(tabPane));
 
-        content.getChildren().add(listView); // 将ListView添加到内容区域
+
+        // 设置ListView的高度为 item数量 * cell高度 + 边距
+        listView.setPrefHeight(connectionList.size() * cellHeight + 2 * content.getSpacing());
+
+
+        Region leftSpace = new Region();  // 左侧空间
+        Region rightSpace = new Region(); // 右侧空间
+        HBox.setHgrow(leftSpace, Priority.ALWAYS);  // 左侧空间吸收额外空间
+        HBox.setHgrow(rightSpace, Priority.ALWAYS); // 右侧空间吸收额外空间
+        HBox listViewContainer = new HBox(leftSpace, listView, rightSpace);
+        // 设置ListView占据HBox宽度的50%
+        listView.prefWidthProperty().bind(listViewContainer.widthProperty().multiply(0.5));
+
+        content.getChildren().add(listViewContainer); // 将ListView添加到内容区域
 
         return content;
     }

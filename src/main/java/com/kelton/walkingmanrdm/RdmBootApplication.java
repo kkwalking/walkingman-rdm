@@ -60,7 +60,7 @@ public class RdmBootApplication extends Application {
         primaryStage.setMinWidth(MIN_WIDTH);
         primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setFullScreenExitHint("");
-        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/img/logo.png")).toExternalForm()));
+        primaryStage.getIcons().add(new Image("/img/logo.png"));
         primaryStage.setTitle("walkingman-rdm");
         primaryStage.show();
     }

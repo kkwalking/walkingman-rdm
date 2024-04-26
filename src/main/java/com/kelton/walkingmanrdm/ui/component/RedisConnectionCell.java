@@ -5,6 +5,7 @@ import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.ConnectionService;
 import com.kelton.walkingmanrdm.ui.component.ConnectionInfoStage;
 import com.kelton.walkingmanrdm.ui.test.RedisKeyBrowser;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -82,7 +83,8 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
         // 重新提取数据，更新ListView
         List<RedisConnectionInfo> connectionList = ConnectionService.INSTANT.getAllConnectList();
         List<RedisConnectInfoProp> props = RedisConnectionInfo.convertToPropList(connectionList);
-        getListView().setItems(FXCollections.observableArrayList(props));
+        getListView().getItems().clear();
+        getListView().getItems().addAll(props);
     }
 
 
