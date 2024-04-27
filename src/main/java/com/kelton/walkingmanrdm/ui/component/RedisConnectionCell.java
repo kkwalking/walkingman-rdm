@@ -3,11 +3,8 @@ package com.kelton.walkingmanrdm.ui.component;
 import com.kelton.walkingmanrdm.core.model.RedisConnectInfoProp;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.ConnectionService;
-import com.kelton.walkingmanrdm.ui.component.ConnectionInfoStage;
-import com.kelton.walkingmanrdm.ui.test.RedisKeyBrowser;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
+import com.kelton.walkingmanrdm.ui.demo.RedisKeyBrowser;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -15,8 +12,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-
-import java.util.List;
 
 public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
 
@@ -67,16 +62,27 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
         } else {
             // 设置文本为连接名称
             nameLabel.setText(item.title().get());
+            nameLabel.setStyle("-fx-font-size: 16px;-fx-padding: 5");
             setGraphic(hbox); // 设置图形为HBox
             setOnMouseClicked(event -> {
                 // 左键双击
                 if(event.getClickCount() == 2 && event.getButton() == MouseButton.PRIMARY) {
-                    openAndSelectNewTab(item);
+                    if(checkConnection(item)) {
+                        openAndSelectNewTab(item);
+                    } else {
+                        NotificationManager.showNotification("["+item.title().get() + "] 连接到redis失败", NotificationManager.Type.ERROR);
+                    }
                 }
             });
         }
     }
-    
+
+    private boolean checkConnection(RedisConnectInfoProp item) {
+        RedisConnectionInfo info = item.toInfo();
+        return RedisBasicCommand.INSTANT.testConnect(info);
+
+    }
+
     private void editConnection(RedisConnectInfoProp connection) {
         ConnectionInfoStage connectionInfoStage = new ConnectionInfoStage(connection, null);
         connectionInfoStage.show();

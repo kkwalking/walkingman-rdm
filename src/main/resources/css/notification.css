@@ -1,0 +1,9 @@
+.button-close {
+    -fx-border-width: 0;
+    -fx-background-radius: 15;
+    -fx-background-color: transparent;
+}
+
+.button-close:hover {
+    -fx-background-color: #e0dede;
+}

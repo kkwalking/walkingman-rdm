@@ -1,4 +1,4 @@
-package com.kelton.walkingmanrdm.ui.test;
+package com.kelton.walkingmanrdm.ui.demo;
 
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
@@ -9,7 +9,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.util.Set;

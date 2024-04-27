@@ -49,6 +49,7 @@ public class MainPane extends BorderPane {
 
     private HBox createHeader() {
         HBox header = new HBox();
+        header.setPadding(new Insets(30));
         Button newBtn = new Button("+ 新增连接");
         newBtn.setOnAction(event -> {
             // 实现打开一个对话框来添加新的Redis连接，并保存到数据库
@@ -70,7 +71,6 @@ public class MainPane extends BorderPane {
         });
 
         Region spaceReg = new Region();
-        header.setPadding(new Insets(5, 30, 5, 30));
         HBox.setHgrow(spaceReg, Priority.ALWAYS);
         header.getChildren().addAll(spaceReg, newBtn);
         return header;
@@ -105,9 +105,9 @@ public class MainPane extends BorderPane {
                     new ConnectionListView<>(FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)), CELL_HEIGHT*4, CELL_HEIGHT*10, CELL_HEIGHT);
             listView.setCellFactory(param -> new RedisConnectionCell(tabPane));
             listView.setPrefHeight(connectionList.size() * CELL_HEIGHT + 2 * content.getSpacing());
+            listViewContainer = new HBox(leftSpace, listView, rightSpace);
             // 设置ListView占据HBox宽度的50%
             listView.prefWidthProperty().bind(listViewContainer.widthProperty().multiply(0.5));
-            listViewContainer = new HBox(leftSpace, listView, rightSpace);
         } else {
             Label promptNewConnLabel = new Label("点击右侧新建Redis连接~");
             listViewContainer = new HBox(leftSpace, promptNewConnLabel, rightSpace);

@@ -1,4 +1,4 @@
-package com.kelton.walkingmanrdm.ui.test;
+package com.kelton.walkingmanrdm.ui.demo;
 
 import com.kelton.walkingmanrdm.common.util.SqlUtils;
 import com.kelton.walkingmanrdm.ui.component.MainPane;

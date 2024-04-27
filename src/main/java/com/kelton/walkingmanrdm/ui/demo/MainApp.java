@@ -1,4 +1,4 @@
-package com.kelton.walkingmanrdm.ui.test;
+package com.kelton.walkingmanrdm.ui.demo;
 
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
