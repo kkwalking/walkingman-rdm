@@ -40,16 +40,12 @@ public class ConnectionListView<T> extends ListView<T> {
     public void refreshHeight() {
         ObservableList<T> items = getItems();
         if (items.size() > 0) {
-            // 计算当前高度，包括 items 的总高度和额外的 10px 边距。
             final double currentHeight = Bindings.size(items).multiply(cellHeight).add(10).doubleValue();
 
-            // 确保当前高度不低于最小高度。
             double heightNotLowerThanMin = Math.max(currentHeight, min);
 
-            // 最后，确保高度不超过最大高度。
             double finalHeight = Math.min(heightNotLowerThanMin, max);
 
-            // 设置 ListView 的最佳高度。
             setPrefHeight(finalHeight);
         } else {
             Label promptNewConnLabel = new Label("点击右侧新建Redis连接~");

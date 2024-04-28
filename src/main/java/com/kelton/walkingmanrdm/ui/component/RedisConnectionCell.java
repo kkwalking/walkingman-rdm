@@ -4,7 +4,6 @@ import com.kelton.walkingmanrdm.core.model.RedisConnectInfoProp;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.ConnectionService;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
-import com.kelton.walkingmanrdm.ui.demo.RedisKeyBrowser;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -84,7 +83,7 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
     }
 
     private void editConnection(RedisConnectInfoProp connection) {
-        ConnectionInfoStage connectionInfoStage = new ConnectionInfoStage(connection, null);
+        ConnectionInfoStage connectionInfoStage = new ConnectionInfoStage(connection);
         connectionInfoStage.show();
         connectionInfoStage.setOnHidden(event -> {
             getListView().refresh();
@@ -93,7 +92,6 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
 
     private void deleteConnection(RedisConnectInfoProp connection) {
         ConnectionService.INSTANT.deleteById(connection.id().get());
-        // 重新提取数据，更新ListView
         getListView().getItems().remove(connection);
     }
 
@@ -109,10 +107,10 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
         }
         // 如果不存在则创建新的Tab并选中
         Tab newTab = new Tab(tabTitle);
-        BorderPane redisContent = new RedisKeyBrowser().createContent(connectionInfo.toInfo()); // 假设方法返回BorderPane，传入连接信息
+        BorderPane redisContent = new RedisOperaPane(connectionInfo.toInfo());
         newTab.setContent(redisContent);
-        newTab.setClosable(true); // 设置新Tab可关闭
-        tabPane.getTabs().add(newTab); // 添加新的Tab到TabPane中
+        newTab.setClosable(true);
+        tabPane.getTabs().add(newTab);
         tabPane.getSelectionModel().select(newTab); // 切换到新创建的Tab
     }
 

@@ -45,11 +45,9 @@ public class ConnectionInfoStage extends Stage {
 
     private boolean promptIsPlay;
 
-    private ListView<RedisConnectInfoProp> listView;
 
-    public ConnectionInfoStage(RedisConnectInfoProp connectionInfo, ListView<RedisConnectInfoProp> listView) {
+    public ConnectionInfoStage(RedisConnectInfoProp connectionInfo) {
         this();
-        this.listView = listView;
         id = connectionInfo.id().getValue();
 
         // 建立双向绑定
@@ -57,11 +55,6 @@ public class ConnectionInfoStage extends Stage {
         hostField.textProperty().bindBidirectional(connectionInfo.host());
         portField.textProperty().bindBidirectional(connectionInfo.port());
         passField.textProperty().bindBidirectional(connectionInfo.password());
-    }
-
-    public ConnectionInfoStage(ListView<RedisConnectInfoProp> listView) {
-        this();
-        this.listView = listView;
     }
 
 

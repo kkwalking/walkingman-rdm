@@ -1,15 +1,12 @@
-package com.kelton.walkingmanrdm.ui.demo;
+package com.kelton.walkingmanrdm.ui.component;
 
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
 import com.kelton.walkingmanrdm.core.service.RedisStringCommand;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
 import java.util.Set;
 
@@ -18,20 +15,10 @@ import java.util.Set;
  * @Date 2024/4/25 16:30
  * @Version 1.0
  */
-public class RedisKeyBrowser extends Application {
+public class RedisOperaPane extends BorderPane {
 
     private TextArea valueTextArea;
 
-    @Override
-    public void start(Stage primaryStage) {
-        RedisConnectionInfo redisConnectionInfo = new RedisConnectionInfo();
-        redisConnectionInfo.host("127.0.0.1").port(6379).password("0754zzk");
-        BorderPane content = createContent(redisConnectionInfo);
-        Scene scene = new Scene(content, 600, 400);
-        primaryStage.setTitle("Redis Key Browser");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
 
     private void addKeyToTree(String[] parts, TreeItem<String> parent) {
         for (int i = 0; i < parts.length; i++) {
@@ -66,7 +53,7 @@ public class RedisKeyBrowser extends Application {
     }
 
     // 此方法将创建并返回包含UI控件的BorderPane
-    public BorderPane createContent(RedisConnectionInfo connectionInfo) {
+    public RedisOperaPane(RedisConnectionInfo connectionInfo) {
         valueTextArea = new TextArea();
         valueTextArea.setEditable(false);
 
@@ -93,16 +80,8 @@ public class RedisKeyBrowser extends Application {
                 }
             }
         });
-
-        // 使用BorderPane作为布局容器
-        BorderPane borderPane = new BorderPane();
-        borderPane.setLeft(treeView);  // TreeView 放在左侧
-        borderPane.setCenter(valueTextArea);  // TextArea 放在中间展示 value
-
-        return borderPane;
+        setLeft(treeView);  // TreeView 放在左侧
+        setCenter(valueTextArea);  // TextArea 放在中间展示 value
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
