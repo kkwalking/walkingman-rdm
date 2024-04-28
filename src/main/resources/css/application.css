@@ -1,0 +1,35 @@
+.tab-pane .tab-header-background {
+    /* 整个tab标签页头的背景颜色 */
+    -fx-background-color: #F4F4F4;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #009688;
+}
+
+.tab-pane .tab:selected .tab-label {
+    /* 选中的tab标签的文字颜色 */
+    -fx-text-fill: white;
+}
+
+.tab-pane .tab {
+    /* 非选中的tab标签的文字颜色（如果需要） */
+    -fx-text-fill: #121A2A;
+    -fx-background-color: #EDEAFA;
+    -fx-background-radius: 10;
+    -fx-font-size: 12;
+    -fx-padding: 4 10 4 10;
+    /*-fx-background-insets: 0, 0 5 0 0, 1 6 0 0 ;*/
+    /*-fx-padding: 4 10 4 4 ;*/
+}
+
+.tab-pane:focused .focus-indicator {
+    /* 移除焦点指示器的边框颜色 */
+    -fx-border-color: transparent;
+}
+
+/* 移除tab标签下的边框线条 */
+.tab-pane .headers-region {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}

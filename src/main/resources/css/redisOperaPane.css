@@ -1,0 +1,17 @@
+.tab-vbox {
+    -fx-background-radius: 10;
+}
+
+.tab-vbox-hover {
+    -fx-background-color: #e9f5f3;
+}
+
+.tab-selected {
+    -fx-background-color: #E9F5F3;
+}
+
+.tab-selected .label{
+    -fx-text-fill: #009688;
+    -fx-background-color: #E9F5F3;
+}
+

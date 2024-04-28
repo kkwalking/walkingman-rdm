@@ -7,10 +7,7 @@ import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 
 public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
 
@@ -108,6 +105,7 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
         // 如果不存在则创建新的Tab并选中
         Tab newTab = new Tab(tabTitle);
         BorderPane redisContent = new RedisOperaPane(connectionInfo.toInfo());
+        VBox.setVgrow(redisContent, Priority.ALWAYS);
         newTab.setContent(redisContent);
         newTab.setClosable(true);
         tabPane.getTabs().add(newTab);

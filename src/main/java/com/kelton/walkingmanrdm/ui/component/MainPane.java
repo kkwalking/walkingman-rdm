@@ -5,6 +5,7 @@ import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.ConnectionService;
 import com.kelton.walkingmanrdm.ui.component.ConnectionInfoStage;
 import com.kelton.walkingmanrdm.ui.component.RedisConnectionCell;
+import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -42,8 +43,6 @@ public class MainPane extends BorderPane {
         this.tabPane = tabPane;
         setTop(header); // 设置头部区域
         setCenter(content); // 设置内容区域
-
-        // 加载CSS样式文件
         getStylesheets().add(getClass().getResource("/css/mainPane.css").toExternalForm());
     }
 

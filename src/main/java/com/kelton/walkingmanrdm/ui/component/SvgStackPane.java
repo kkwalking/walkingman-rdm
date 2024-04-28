@@ -17,15 +17,20 @@ public class SvgStackPane extends StackPane {
 
     private String svgPathContent;
 
+    private Region region;
+
+    private String color;
+
     public SvgStackPane(double prefWidth, double prefHeight, String svgPathContent, String color) {
         super();
         this.prefWidth = prefWidth;
         this.prefHeight = prefHeight;
         this.svgPathContent = svgPathContent;
+        this.color = color;
         this.setPrefSize(prefWidth, prefHeight);
         this.setMaxSize(prefWidth, prefHeight);
 
-        Region region = new Region();
+        region = new Region();
         SVGPath svgPath = new SVGPath();
         svgPath.setContent(svgPathContent);
         region.setShape(svgPath);
@@ -33,6 +38,14 @@ public class SvgStackPane extends StackPane {
         region.setMaxHeight(prefHeight);
         region.setStyle(region.getStyle() + "-fx-background-color: " + color + ";");
         getChildren().add(region);
+    }
+
+    public void active() {
+        region.setStyle("-fx-background-color: #009688;");
+    }
+
+    public void deactive() {
+        region.setStyle(region.getStyle() + "-fx-background-color: " + color + ";");
     }
 
 

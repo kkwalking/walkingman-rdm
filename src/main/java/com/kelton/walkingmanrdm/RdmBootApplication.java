@@ -11,7 +11,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,9 +40,8 @@ public class RdmBootApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BorderPane root = new BorderPane(); // 主布局容器
-
         tabPane = new TabPane(); // 标签页容器
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         // 主窗口标签页
         Tab homeTab = new Tab("主窗口");
         MainPane mainPane = new MainPane(tabPane);
@@ -50,19 +51,20 @@ public class RdmBootApplication extends Application {
         // 将标签页添加到TabPane中
         tabPane.getTabs().addAll(homeTab);
 
-        // 将TabPane设置为主布局容器的顶部
-        root.setTop(tabPane);
+        tabPane.setPrefHeight(MIN_HEIGHT);
 
 
         StackPane stackPane = new StackPane();
         stackPane.setPrefSize(MIN_WIDTH, MIN_HEIGHT);
         stackPane.setAlignment(Pos.TOP_CENTER); // 将通知对齐到顶部左
-        stackPane.getChildren().add(root);
+        stackPane.getChildren().add(tabPane);
         // 注册消息通知器
         NotificationManager.register(stackPane);
 
         // 显示Stage
         Scene scene = new Scene(stackPane, null);
+        scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
+
 
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(MIN_WIDTH);
