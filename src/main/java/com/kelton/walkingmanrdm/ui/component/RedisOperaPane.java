@@ -38,7 +38,7 @@ public class RedisOperaPane extends BorderPane {
         super();
         VBox sidebar = createTab();
         sidebar.setPrefWidth(80);
-        sidebar.setStyle("-fx-background-color: #FCFCFD;");
+        sidebar.setStyle("-fx-background-color: #F2F2F2;");
 
         setLeft(sidebar);
 

@@ -1,9 +1,11 @@
 package com.kelton.walkingmanrdm.ui.component;
 
 import com.kelton.walkingmanrdm.ui.svg.RedisIcon;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.HBox;
@@ -20,6 +22,8 @@ import java.util.function.Consumer;
 public class RedisKeyTreeView extends TreeView<Pane> {
 
     private TreeItem<Pane> rootNode;
+
+
 
     public RedisKeyTreeView(Set<String> keys, Consumer<String> function) {
         super();
@@ -43,9 +47,62 @@ public class RedisKeyTreeView extends TreeView<Pane> {
                 }
             }
         });
+
+        // 更新叶子节点的图标
+        freshLeafIcon(rootNode);
+
         setMaxWidth(Double.MAX_VALUE);
 
+        this.setCellFactory(tv -> {
+            TreeCell<Pane> cell = new TreeCell<Pane>() {
+                @Override
+                protected void updateItem(Pane item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(item);
+                    }
+                }
+            };
+            // 添加CSS样式
+            cell.getStyleClass().add("custom-tree-cell");
+            return cell;
+        });
+        this.getStyleClass().add("redis-tree-view");
 
+        this.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                // 取消选中时的处理逻辑
+                updateTreeItemIcon(oldValue, false);
+            }
+            if (newValue != null) {
+                // 选中时的处理逻辑
+                updateTreeItemIcon(newValue, true);
+            }
+        });
+    }
+
+    private void updateTreeItemIcon(TreeItem<Pane> item, boolean active) {
+        RedisIcon redisIcon = (RedisIcon) item.getValue().getChildren().get(0);
+        if (active) {
+            redisIcon.active();
+        } else {
+            redisIcon.deactive();
+        }
+    }
+
+    private void freshLeafIcon(TreeItem<Pane> node) {
+        ObservableList<TreeItem<Pane>> children = node.getChildren();
+        children.forEach( e-> {
+            boolean leaf = e.isLeaf();
+            if (leaf) {
+                 e.getValue().getChildren().remove(0);
+                e.getValue().getChildren().add(0, new RedisIcon(RedisIcon.Type.String));
+            } else {
+                freshLeafIcon(e);
+            }
+        });
     }
 
     private String buildFullKeyPath(TreeItem<Pane> item) {
@@ -76,9 +133,11 @@ public class RedisKeyTreeView extends TreeView<Pane> {
             if (!found) {
                 // 没有找到对应的子节点，创建一个新的节点
                 Label label = new Label(parts[i]);
-                HBox hBox = new HBox(new RedisIcon(RedisIcon.Type.Folder), label);
+                RedisIcon redisIcon = new RedisIcon(RedisIcon.Type.Folder);
+                HBox hBox = new HBox(redisIcon, label);
                 hBox.setAlignment(Pos.CENTER_LEFT);
                 TreeItem<Pane> child = new TreeItem<>(hBox);
+
                 parent.getChildren().add(child);
                 parent = child;  // 更新父节点为刚创建的节点
             }
