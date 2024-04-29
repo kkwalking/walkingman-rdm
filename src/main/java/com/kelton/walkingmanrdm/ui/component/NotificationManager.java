@@ -1,5 +1,7 @@
 package com.kelton.walkingmanrdm.ui.component;
 
+import com.kelton.walkingmanrdm.ui.svg.MsgIcon;
+import com.kelton.walkingmanrdm.ui.svg.MyLevelHandler;
 import javafx.animation.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,9 +12,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import javafx.util.Duration;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.security.Key;
 
@@ -61,23 +65,23 @@ public class NotificationManager {
         notificationItem.setMaxHeight(40);
         notificationItem.setPadding(new Insets(5, 5, 5, 5));
 
-        String d = "";
-        String notificationColor = "";
+        FontIcon fontIcon = new FontIcon();
         switch (type) {
             case INFO -> {
-                d = "M512 85.333333c235.648 0 426.666667 191.018667 426.666667 426.666667s-191.018667 426.666667-426.666667 426.666667S85.333333 747.648 85.333333 512 276.352 85.333333 512 85.333333z m-74.965333 550.4L346.453333 545.152a42.666667 42.666667 0 1 0-60.330666 60.330667l120.704 120.704a42.666667 42.666667 0 0 0 60.330666 0l301.653334-301.696a42.666667 42.666667 0 1 0-60.288-60.330667l-271.530667 271.488z";
-                notificationColor = "#67c23a";
+                fontIcon.setIconCode(MsgIcon.SUCCESS);
+                fontIcon.setIconColor(Paint.valueOf("#67c23a"));
             }
             case WARN -> {
-                d = "M535.893333 972.288c-244.736 0-443.733333-198.997333-443.733333-443.733333s198.997333-443.733333 443.733333-443.733334 443.733333 198.997333 443.733334 443.733334-199.168 443.733333-443.733334 443.733333z m0-819.2c-207.018667 0-375.466667 168.448-375.466666 375.466667s168.448 375.466667 375.466666 375.466666 375.466667-168.448 375.466667-375.466666-168.448-375.466667-375.466667-375.466667zM535.893333 562.688c-18.773333 0-34.133333-15.36-34.133333-34.133333V319.146667c0-18.773333 15.36-34.133333 34.133333-34.133334s34.133333 15.36 34.133334 34.133334v209.237333c0 18.944-15.36 34.304-34.133334 34.304zM535.893333 670.208m-51.712 0a51.712 51.712 0 1 0 103.424 0 51.712 51.712 0 1 0-103.424 0Z";
-                notificationColor = "#e6a23c";
+                fontIcon.setIconCode(MsgIcon.WARN);
+                fontIcon.setIconColor(Paint.valueOf("#e6a23c"));
             }
             case ERROR -> {
-                d = "M512 0C229.376 0 0 229.376 0 512s229.376 512 512 512 512-229.376 512-512S794.624 0 512 0z m218.624 672.256c15.872 15.872 15.872 41.984 0 57.856-8.192 8.192-18.432 11.776-29.184 11.776s-20.992-4.096-29.184-11.776L512 569.856l-160.256 160.256c-8.192 8.192-18.432 11.776-29.184 11.776s-20.992-4.096-29.184-11.776c-15.872-15.872-15.872-41.984 0-57.856L454.144 512 293.376 351.744c-15.872-15.872-15.872-41.984 0-57.856 15.872-15.872 41.984-15.872 57.856 0L512 454.144l160.256-160.256c15.872-15.872 41.984-15.872 57.856 0 15.872 15.872 15.872 41.984 0 57.856L569.856 512l160.768 160.256z";
-                notificationColor = "#f56c6c";
+                fontIcon.setIconCode(MsgIcon.ERROR);
+                fontIcon.setIconColor(Paint.valueOf("#f56c6c"));
             }
         }
-        StackPane iconPane = new SvgStackPane(20, 20, d, notificationColor);
+        fontIcon.setIconSize(20);
+        // StackPane iconPane = new SvgStackPane(20, 20, d, notificationColor);
 
 
         // Message label
@@ -100,11 +104,11 @@ public class NotificationManager {
         closeButton.getStyleClass().add("button-close");
 
         // Add components to the AnchorPane
-        notificationItem.getChildren().addAll(iconPane, messageLabel, closeButton);
+        notificationItem.getChildren().addAll(fontIcon, messageLabel, closeButton);
 
         // Anchor iconPane to the left
-        AnchorPane.setLeftAnchor(iconPane, 5.0);
-        AnchorPane.setTopAnchor(iconPane, 5.0);
+        AnchorPane.setLeftAnchor(fontIcon, 5.0);
+        AnchorPane.setTopAnchor(fontIcon, 5.0);
 
         // Anchor closeButton to the right
         AnchorPane.setRightAnchor(closeButton, 5.0);

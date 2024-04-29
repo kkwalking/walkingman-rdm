@@ -1,4 +1,5 @@
 import com.kelton.walkingmanrdm.ui.svg.MyIconHandler;
+import com.kelton.walkingmanrdm.ui.svg.MyLevelHandler;
 
 open module com.kelton.walkingmanrdm {
     requires javafx.controls;
@@ -18,7 +19,7 @@ open module com.kelton.walkingmanrdm {
     requires org.kordamp.ikonli.coreui;
     requires org.kordamp.ikonli.materialdesign2;
 
-    provides org.kordamp.ikonli.IkonHandler with MyIconHandler;
+    provides org.kordamp.ikonli.IkonHandler with MyIconHandler, MyLevelHandler;
 
     exports com.kelton.walkingmanrdm;
     exports com.kelton.walkingmanrdm.core.model;
