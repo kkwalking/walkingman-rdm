@@ -15,3 +15,7 @@
     -fx-background-color: #E9F5F3;
 }
 
+.tree-cell {
+    -fx-alignment: center-left;
+}
+

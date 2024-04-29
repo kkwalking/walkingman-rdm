@@ -1,3 +1,5 @@
+import com.kelton.walkingmanrdm.ui.svg.MyIconHandler;
+
 open module com.kelton.walkingmanrdm {
     requires javafx.controls;
     requires javafx.fxml;
@@ -10,6 +12,13 @@ open module com.kelton.walkingmanrdm {
     requires java.base;
     requires org.apache.commons.pool2;
     requires redis.clients.jedis;
+    requires org.kordamp.ikonli.javafx;
+    requires org.kordamp.ikonli.core;
+    requires org.kordamp.ikonli.boxicons;
+    requires org.kordamp.ikonli.coreui;
+    requires org.kordamp.ikonli.materialdesign2;
+
+    provides org.kordamp.ikonli.IkonHandler with MyIconHandler;
 
     exports com.kelton.walkingmanrdm;
     exports com.kelton.walkingmanrdm.core.model;

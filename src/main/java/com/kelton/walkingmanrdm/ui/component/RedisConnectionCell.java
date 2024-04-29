@@ -8,6 +8,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
+import org.kordamp.ikonli.boxicons.BoxiconsRegular;
+import org.kordamp.ikonli.coreui.CoreUiBrands;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
 
@@ -103,13 +107,20 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
             }
         }
         // 如果不存在则创建新的Tab并选中
-        Tab newTab = new Tab(tabTitle);
+        Tab redisTab = new Tab(tabTitle);
+
+        FontIcon redisIcon = new FontIcon(BoxiconsRegular.DATA);
+        redisIcon.setIconSize(18);
+        redisIcon.iconColorProperty().bind(
+                redisTab.selectedProperty().map(selected-> selected? Paint.valueOf("white"):Paint.valueOf("black")));
+
+        redisTab.setGraphic(redisIcon);
         BorderPane redisContent = new RedisOperaPane(connectionInfo.toInfo());
         VBox.setVgrow(redisContent, Priority.ALWAYS);
-        newTab.setContent(redisContent);
-        newTab.setClosable(true);
-        tabPane.getTabs().add(newTab);
-        tabPane.getSelectionModel().select(newTab); // 切换到新创建的Tab
+        redisTab.setContent(redisContent);
+        redisTab.setClosable(true);
+        tabPane.getTabs().add(redisTab);
+        tabPane.getSelectionModel().select(redisTab); // 切换到新创建的Tab
     }
 
 

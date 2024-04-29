@@ -14,8 +14,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import org.kordamp.ikonli.boxicons.BoxiconsRegular;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
  * @Author zhouzekun
@@ -44,6 +47,12 @@ public class RdmBootApplication extends Application {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         // 主窗口标签页
         Tab homeTab = new Tab("主窗口");
+
+        FontIcon homeIcon = new FontIcon(BoxiconsRegular.HOME);
+        homeIcon.setIconSize(18);
+        homeIcon.iconColorProperty().bind(
+                homeTab.selectedProperty().map(selected-> selected?Paint.valueOf("white"):Paint.valueOf("black")));
+        homeTab.setGraphic(homeIcon);
         MainPane mainPane = new MainPane(tabPane);
         homeTab.setContent(mainPane);
         homeTab.setClosable(false);
