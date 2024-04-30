@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
+import org.kordamp.ikonli.antdesignicons.AntDesignIconsFilled;
 import org.kordamp.ikonli.boxicons.BoxiconsRegular;
 import org.kordamp.ikonli.coreui.CoreUiBrands;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -20,8 +21,8 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
     private HBox hbox = new HBox();
 
     private Label nameLabel = new Label("");
-    private Button editButton = new Button("编辑");
-    private Button deleteButton = new Button("删除");
+    private StackPane editButton = new StackPane();
+    private StackPane deleteButton = new StackPane();
     private Region spacer = new Region(); // 创建一个弹性空白区域
 
     private TabPane tabPane;
@@ -31,16 +32,28 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
         this.tabPane = tabPane;
 
         hbox.setAlignment(Pos.CENTER);
+        hbox.setSpacing(5);
 
         HBox.setHgrow(spacer, Priority.ALWAYS); // 让空白区域可以伸缩
-        editButton.setOnAction(event -> {
+        FontIcon editIcon = new FontIcon(AntDesignIconsFilled.EDIT);
+        editIcon.setIconSize(20);
+        editButton.getChildren().add(editIcon);
+        editButton.getStyleClass().add("edit-btn");
+        editButton.setMaxSize(30, 30);
+        editButton.setMinSize(30, 30);
+        editButton.setOnMouseClicked(event -> {
             RedisConnectInfoProp connection = getItem();
             // 实现编辑逻辑，打开编辑窗口并传入当前连接
             editConnection(connection);
 
         });
-
-        deleteButton.setOnAction(event -> {
+        FontIcon delIcon = new FontIcon(AntDesignIconsFilled.DELETE);
+        delIcon.setIconSize(20);
+        deleteButton.getChildren().add(delIcon);
+        deleteButton.getStyleClass().add("del-btn");
+        deleteButton.setMaxSize(30, 30);
+        deleteButton.setMinSize(30, 30);
+        deleteButton.setOnMouseClicked(event -> {
             RedisConnectInfoProp connection = getItem();
             // 实现删除逻辑，从数据库中删除并刷新ListView
             deleteConnection(connection);
@@ -74,6 +87,12 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
                     }
                 }
             });
+            getStyleClass().removeAll("list-cell-odd", "list-cell-even");
+            if (getIndex() % 2 == 0) {
+                getStyleClass().add("list-cell-even");
+            } else {
+                getStyleClass().add("list-cell-odd");
+            }
         }
     }
 

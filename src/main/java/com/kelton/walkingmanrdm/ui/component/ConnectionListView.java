@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
@@ -21,9 +22,11 @@ public class ConnectionListView<T> extends ListView<T> {
     private final double max;
     private final double cellHeight;
 
-    public ConnectionListView(ObservableList<T> items, double min, double max, double cellHeight) {
-        super(items);
+    private TabPane tabPane;
 
+    public ConnectionListView(TabPane tabPane, ObservableList<T> items, double min, double max, double cellHeight) {
+        super(items);
+        this.tabPane = tabPane;
         this.min = min;
         this.max = max;
         this.cellHeight = cellHeight;
@@ -34,6 +37,7 @@ public class ConnectionListView<T> extends ListView<T> {
             minHeight(min);
         }
         maxHeight(max);
+        setCellFactory(param -> (ListCell<T>) new RedisConnectionCell(tabPane));
     }
 
 

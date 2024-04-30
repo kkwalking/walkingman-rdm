@@ -36,11 +36,10 @@ public class MainPane extends BorderPane {
     private TabPane tabPane;
 
     public MainPane(TabPane tabPane) {
-        super(); // 主布局容器
-
+        super();
+        this.tabPane = tabPane;
         header = createHeader(); // 创建header区域
         content = createContent(); // 创建content区域
-        this.tabPane = tabPane;
         setTop(header); // 设置头部区域
         setCenter(content); // 设置内容区域
         getStylesheets().add(getClass().getResource("/css/mainPane.css").toExternalForm());
@@ -79,9 +78,8 @@ public class MainPane extends BorderPane {
         List<RedisConnectionInfo> connectionList = fetchConnectionFromDatabase();
         listViewContainer.getChildren().remove(1);
         ConnectionListView<RedisConnectInfoProp> newListView =
-                new ConnectionListView<>(FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)), CELL_HEIGHT*4, CELL_HEIGHT*10, CELL_HEIGHT);
+                new ConnectionListView<>(tabPane, FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)), CELL_HEIGHT*4, CELL_HEIGHT*10, CELL_HEIGHT);
         listViewContainer.getChildren().add(1,newListView);
-        newListView.setCellFactory(param -> new RedisConnectionCell(tabPane));
         newListView.refreshHeight();
         // 设置ListView占据HBox宽度的50%
         newListView.prefWidthProperty().bind(listViewContainer.widthProperty().multiply(0.5));
@@ -101,8 +99,7 @@ public class MainPane extends BorderPane {
 
         if (connectionList.size() > 0) {
             ListView<RedisConnectInfoProp> listView =
-                    new ConnectionListView<>(FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)), CELL_HEIGHT*4, CELL_HEIGHT*10, CELL_HEIGHT);
-            listView.setCellFactory(param -> new RedisConnectionCell(tabPane));
+                    new ConnectionListView<>(tabPane, FXCollections.observableArrayList(RedisConnectionInfo.convertToPropList(connectionList)), CELL_HEIGHT*4, CELL_HEIGHT*10, CELL_HEIGHT);
             listView.setPrefHeight(connectionList.size() * CELL_HEIGHT + 2 * content.getSpacing());
             listViewContainer = new HBox(leftSpace, listView, rightSpace);
             // 设置ListView占据HBox宽度的50%

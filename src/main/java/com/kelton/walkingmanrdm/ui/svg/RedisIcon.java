@@ -39,8 +39,8 @@ public class RedisIcon extends StackPane{
         switch (type) {
 
             case Folder -> {
-                icon.setIconColor(Paint.valueOf("black"));
-                setStyle("-fx-background-radius: 5;-fx-background-color: #6fa89e;" +
+                icon.setIconColor(Paint.valueOf("#009688"));
+                setStyle("-fx-background-radius: 5;-fx-background-color: white;" +
                         "-fx-border-radius: 5; -fx-border-width: 1;-fx-border-color: #E0E0E6;");
             }
             case String -> {
@@ -73,6 +73,11 @@ public class RedisIcon extends StackPane{
 
     public void active() {
         switch (type) {
+            case Folder -> {
+                icon.setIconColor(Paint.valueOf("black"));
+                setStyle("-fx-background-radius: 5;-fx-background-color: rgba(108,157,107,0.56);" +
+                        "-fx-border-radius: 5; -fx-border-width: 0;-fx-border-color: #E0E0E6;");
+            }
             case String -> {
                 icon.setIconColor(Paint.valueOf("white"));
                 setStyle("-fx-background-radius: 5;-fx-background-color: #8B5CF6;" +

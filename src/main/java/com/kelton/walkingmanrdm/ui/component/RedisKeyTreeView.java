@@ -54,7 +54,7 @@ public class RedisKeyTreeView extends TreeView<Pane> {
         setMaxWidth(Double.MAX_VALUE);
 
         this.setCellFactory(tv -> {
-            TreeCell<Pane> cell = new TreeCell<Pane>() {
+            TreeCell<Pane> cell = new TreeCell<>() {
                 @Override
                 protected void updateItem(Pane item, boolean empty) {
                     super.updateItem(item, empty);
@@ -63,9 +63,15 @@ public class RedisKeyTreeView extends TreeView<Pane> {
                     } else {
                         setGraphic(item);
                     }
+                    getStyleClass().removeAll("tree-cell-odd", "tree-cell-even");
+                    if (getIndex() % 2 == 0) {
+                        getStyleClass().add("tree-cell-even");
+                    } else {
+                        getStyleClass().add("tree-cell-odd");
+                    }
                 }
             };
-            // 添加CSS样式
+            // 添加cell自定义CSS类
             cell.getStyleClass().add("custom-tree-cell");
             return cell;
         });
@@ -112,7 +118,8 @@ public class RedisKeyTreeView extends TreeView<Pane> {
 
         // 循环向上构建路径，直到到达根节点位置
         while (parent != null && parent != rootNode) { // parent != root 用来检查是否为根节点
-            keyPath.insert(0, parent.getValue() + ":");
+            String parentKey = ((Label) parent.getValue().getChildren().get(1)).getText();
+            keyPath.insert(0, parentKey + ":");
             parent = parent.getParent();
         }
 

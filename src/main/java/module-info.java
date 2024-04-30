@@ -18,6 +18,7 @@ open module com.kelton.walkingmanrdm {
     requires org.kordamp.ikonli.boxicons;
     requires org.kordamp.ikonli.coreui;
     requires org.kordamp.ikonli.materialdesign2;
+    requires org.kordamp.ikonli.antdesignicons;
 
     provides org.kordamp.ikonli.IkonHandler with MyIconHandler, MyLevelHandler;
 
