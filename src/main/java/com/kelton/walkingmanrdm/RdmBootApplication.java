@@ -6,6 +6,7 @@ import com.kelton.walkingmanrdm.ui.component.NotificationManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -15,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.boxicons.BoxiconsRegular;
@@ -27,8 +29,8 @@ import org.kordamp.ikonli.javafx.FontIcon;
 @Slf4j
 public class RdmBootApplication extends Application {
 
-    private static final double MIN_WIDTH = 1450; // 最小宽度
-    private static final double MIN_HEIGHT = 820; // 最小高度
+    private double MIN_WIDTH; // 最小宽度
+    private double MIN_HEIGHT; // 最小高度
 
     public static TabPane tabPane;
 
@@ -43,6 +45,20 @@ public class RdmBootApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        MIN_WIDTH = bounds.getWidth() * 0.75;
+        MIN_HEIGHT = bounds.getHeight() * 0.75;
+        // 计算中心位置
+        double centerX = bounds.getMinX() + (bounds.getWidth() - MIN_WIDTH) / 2;
+        double centerY = bounds.getMinY() + (bounds.getHeight() - MIN_HEIGHT) / 2;
+        primaryStage.setX(centerX);
+        primaryStage.setY(centerY);
+        primaryStage.setWidth(MIN_WIDTH);  //设置窗口宽度为屏幕宽度的四分之三
+        primaryStage.setHeight(MIN_HEIGHT);  //设置窗口高度为屏幕高度的四分之三
+
+
         tabPane = new TabPane(); // 标签页容器
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
         // 主窗口标签页
@@ -76,8 +92,6 @@ public class RdmBootApplication extends Application {
 
 
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(MIN_WIDTH);
-        primaryStage.setMinHeight(MIN_HEIGHT);
         primaryStage.setFullScreenExitHint("");
         primaryStage.getIcons().add(new Image("/img/logo.png"));
         primaryStage.setTitle("walkingman-rdm");
