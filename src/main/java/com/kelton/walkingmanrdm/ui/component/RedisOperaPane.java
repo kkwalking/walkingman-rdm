@@ -33,9 +33,12 @@ public class RedisOperaPane extends BorderPane {
 
     private List<Pane> contentPaneList = new ArrayList<>(2);
 
+    private RedisConnectionInfo connectionInfo;
+
     // 此方法将创建并返回包含UI控件的BorderPane
     public RedisOperaPane(RedisConnectionInfo connectionInfo) {
         super();
+        this.connectionInfo = connectionInfo;
         VBox sidebar = createTab();
         sidebar.setPrefWidth(80);
         sidebar.setStyle("-fx-background-color: #F2F2F2;");
@@ -153,7 +156,7 @@ public class RedisOperaPane extends BorderPane {
 
     private BorderPane createCmdPane() {
         BorderPane cmdPane = new BorderPane();
-        cmdPane.setCenter(new Label("redis cmd"));
+        cmdPane.setCenter(new RedisCmdPane(this.connectionInfo));
         return cmdPane;
     }
 

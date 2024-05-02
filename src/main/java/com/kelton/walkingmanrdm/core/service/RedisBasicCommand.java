@@ -66,6 +66,8 @@ public interface RedisBasicCommand {
 
     Long dbSize(RedisConnectionInfo connectInfo);
 
+    String sendCommand(RedisConnectionInfo connectionInfo, String command, String... args);
+
     default Map<String, Object> strToMap(String str) {
         Map<String, Object> result = new HashMap<>();
         for (String s : str.split("\r\n")) {

@@ -1,17 +1,13 @@
-package com.kelton.walkingmanrdm.ui.demo;
+package com.kelton.walkingmanrdm.ui.component;
 
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
-import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -19,9 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.exceptions.JedisDataException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -29,40 +23,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class RedisShellSimulator extends Application {
+/**
+ * @Author zhouzekun
+ * @Date 2024/5/1 21:32
+ */
+public class RedisCmdPane extends VBox {
 
     private TextField inputField; // 命令输入框
 
     private ScrollPane scrollPane;
 
     private VBox outputContainer;
-//    private Jedis jedis;          // Redis客户端对象
-    private RedisConnectionInfo redisConnectionInfo;
 
-    @Override
-    public void init() {
-//        jedis = new Jedis("localhost", 6379); // 初始化Redis客户端
-//        jedis.auth("0754zzk");
-        redisConnectionInfo = new RedisConnectionInfo();
-        redisConnectionInfo.host("127.0.0.1").port(6379).password("0754zzk");
+    private RedisConnectionInfo connectionInfo;
 
-    }
 
-    @Override
-    public void start(Stage primaryStage) {
-        VBox root = new VBox();
+    public RedisCmdPane(RedisConnectionInfo info) {
+        this.connectionInfo = info;
+        inputField = new TextField();
+        inputField.setFont(Font.font(14));
 
         scrollPane = new ScrollPane();
         scrollPane.setStyle("-fx-background: black; -fx-control-inner-background: black;-fx-padding: 5");
         outputContainer = new VBox(); // 用于添加输出内容的容器
         scrollPane.setContent(outputContainer);
+        createLayout();
+    }
 
+    private void createLayout() {
         HBox commandArea = new HBox();
         Label hostInfo = new Label("127.0.0.1:6379> ");
         hostInfo.setFont(Font.font(14));
         hostInfo.setStyle("-fx-text-fill: green;");
-        inputField = new TextField();
-        inputField.setFont(Font.font(14));
         commandArea.getChildren().addAll(hostInfo, inputField);
         commandArea.setAlignment(Pos.CENTER_LEFT);
         commandArea.minWidthProperty().bind(scrollPane.widthProperty().subtract(30));
@@ -81,19 +73,15 @@ public class RedisShellSimulator extends Application {
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
         // 把输入字段和输出区布局加到VBox
-        root.getChildren().addAll(scrollPane);
+        getChildren().addAll(scrollPane);
 
         // 给面板添加鼠标点击事件处理器
         scrollPane.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
             inputField.requestFocus(); // 调用requestFocus方法获取焦点
             inputField.end();
         });
-
-        Scene scene = new Scene(root, 600, 400);
-        primaryStage.setTitle("动态Shell接口");
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
+
     private void processCommand(String commandLine) {
         inputField.clear(); // 清除输入框
 
@@ -121,7 +109,7 @@ public class RedisShellSimulator extends Application {
             String redisCommand = commandParts[0];
             String[] args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
 
-            String response = RedisBasicCommand.INSTANT.sendCommand(redisConnectionInfo, redisCommand, args);
+            String response = RedisBasicCommand.INSTANT.sendCommand(this.connectionInfo, redisCommand, args);
             sb.append(response);
         } catch (Exception e) {
             sb.append("(error) ERROR unknown command ");
@@ -133,6 +121,7 @@ public class RedisShellSimulator extends Application {
 
         }
         Label responseLabel = new Label(sb.toString());
+        responseLabel.setFont(Font.font(14));
         responseLabel.setWrapText(true);
         outputContainer.getChildren().addAll(responseLabel, node);
         commandEchoLabel.maxWidthProperty().bind(scrollPane.widthProperty().subtract(15));
@@ -144,56 +133,5 @@ public class RedisShellSimulator extends Application {
 
     }
 
-//    private String sendRedisCommand(String command, String... args) {
-//        // Convert the command to the Protocol.Command enum
-//        redis.clients.jedis.commands.ProtocolCommand protocolCommand = redis.clients.jedis.Protocol.Command.valueOf(command.toUpperCase());
-//
-//        // Send the command using Jedis. This assumes that 'args' can be directly passed to Jedis.
-//        try {
-//            Object response = jedis.sendCommand(protocolCommand, args);
-//            return decodeResponse(response);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "(error) " + e.getMessage();
-//        }
-//    }
-//
-//    private String decodeResponse(Object response) {
-//        if (response instanceof byte[]) {
-//            return new String((byte[]) response, StandardCharsets.UTF_8);
-//
-//        } else if (response instanceof List) {
-//            List<String> ret = ((List<?>) response).stream()
-//                    .map(this::decodeResponse)
-//                    .toList();
-//            StringBuilder retSb = new StringBuilder();
-//            for(int i = 0; i< ret.size(); i++) {
-//                retSb.append(i+1).append(") \"").append(ret.get(i)).append("\"\n");
-//            }
-//            return retSb.toString();
-//
-//        } else if (response instanceof Map) {
-//            return ((Map<?, ?>) response).entrySet().stream()
-//                    .map(entry -> decodeResponse(entry.getKey()) + ": " + decodeResponse(entry.getValue()))
-//                    .collect(Collectors.joining(", "));
-//
-//        } else if (response instanceof String || response instanceof Long) {
-//
-//            return String.valueOf(response);
-//
-//        } else {
-//            return Arrays.toString((byte[]) response);
-//        }
-//    }
-//
-//    @Override
-//    public void stop() {
-//        if (jedis != null) {
-//            jedis.close(); // 程序结束时关闭Redis连接
-//        }
-//    }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
