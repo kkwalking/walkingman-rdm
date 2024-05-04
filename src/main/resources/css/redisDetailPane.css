@@ -1,0 +1,80 @@
+.firstRow {
+    -fx-spacing: 10;
+    -fx-max-height: 28;
+}
+
+.ttlHbox {
+    -fx-alignment: center-left;
+    -fx-border-width:  1px;
+    -fx-border-radius: 1px;
+    -fx-border-color: #cccaca;
+    -fx-padding: 0 10 0 10;
+    -fx-spacing: 10;
+}
+
+.ttlHbox:hover {
+    -fx-border-color: #036C5F;
+}
+
+.headerPane {
+    -fx-background-color: white;
+    -fx-spacing: 5;
+    -fx-padding: 10;
+    -fx-border-insets: 1 0 0 0;
+    -fx-border-color: #F2F2F2;
+}
+
+.key-text {
+    -fx-border-width: 0;
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 10;
+}
+
+.keyHbox {
+    -fx-border-width: 1;
+    -fx-border-radius: 0px 1px 1px 0px;
+    -fx-border-color: #cccaca;
+}
+
+.keyHbox:hover {
+    -fx-border-color: #036C5F;
+}
+
+
+
+.reload-icon {
+    -fx-padding: 5;
+    -fx-start-margin: 5;
+}
+
+.reload-icon:hover {
+    -fx-icon-color: #036C5F;
+}
+
+
+.reloadPane {
+    -fx-padding: 0 10 0 10;
+}
+
+
+.copy-icon {
+    -fx-padding: 5;
+    -fx-start-margin: 5;
+}
+
+.copy-icon:hover {
+    -fx-icon-color: #036C5F;
+}
+
+.copyPane {
+    -fx-padding: 0 10 0 10;
+    -fx-border-width: 1px 1px 1px 0px;
+    -fx-border-radius: 0px 1px 1px 0px;
+    -fx-border-color: #cccaca #cccaca #cccaca transparent;
+}
+
+.copyPane:hover {
+    -fx-border-width: 1px;
+    -fx-border-color:  #036C5F;
+}
+

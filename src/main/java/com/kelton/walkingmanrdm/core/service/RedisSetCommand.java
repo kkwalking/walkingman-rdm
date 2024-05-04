@@ -1,11 +1,14 @@
 package com.kelton.walkingmanrdm.core.service;
 
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
+import com.kelton.walkingmanrdm.core.service.impl.JedisSetCommand;
 import redis.clients.jedis.resps.ScanResult;
 import java.util.List;
 import java.util.Set;
 
 public interface RedisSetCommand {
+
+    RedisSetCommand INSTANT = new JedisSetCommand();
 
     Long sadd(RedisConnectionInfo connectionInfo, String key, String... members);
 

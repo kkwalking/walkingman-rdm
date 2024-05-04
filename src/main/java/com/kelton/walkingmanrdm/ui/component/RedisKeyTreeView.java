@@ -1,16 +1,16 @@
 package com.kelton.walkingmanrdm.ui.component;
 
-import com.kelton.walkingmanrdm.ui.svg.RedisIcon;
+import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
+import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
+import com.kelton.walkingmanrdm.ui.icon.RedisIcon;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -23,10 +23,12 @@ public class RedisKeyTreeView extends TreeView<Pane> {
 
     private TreeItem<Pane> rootNode;
 
+    private RedisConnectionInfo connectionInfo;
 
 
-    public RedisKeyTreeView(Set<String> keys, Consumer<String> function) {
+    public RedisKeyTreeView(RedisConnectionInfo connectionInfo, Set<String> keys, Consumer<String> function) {
         super();
+        this.connectionInfo = connectionInfo;
         // 创建根节点
         rootNode = new TreeItem<>(new HBox(new Pane(), new Label("Redis Keys")));
         rootNode.setExpanded(true);  // 默认展开根节点
@@ -98,13 +100,28 @@ public class RedisKeyTreeView extends TreeView<Pane> {
         }
     }
 
+    /**
+     * todo 非常慢，后续需要优化
+     * @param node
+     */
     private void freshLeafIcon(TreeItem<Pane> node) {
         ObservableList<TreeItem<Pane>> children = node.getChildren();
-        children.forEach( e-> {
+        children.forEach(e -> {
             boolean leaf = e.isLeaf();
             if (leaf) {
-                 e.getValue().getChildren().remove(0);
-                e.getValue().getChildren().add(0, new RedisIcon(RedisIcon.Type.String));
+                String key = buildFullKeyPath(e);
+                e.getValue().getChildren().remove(0);
+                // 调用 type查找类型
+                String type = RedisBasicCommand.INSTANT.type(connectionInfo, key);
+                System.out.println(key + ":" + type);
+                switch (type) {
+                    case "string" -> e.getValue().getChildren().add(0, new RedisIcon(RedisIcon.Type.String));
+                    case "hash" -> e.getValue().getChildren().add(0, new RedisIcon(RedisIcon.Type.Hash));
+                    case "set" -> e.getValue().getChildren().add(0, new RedisIcon(RedisIcon.Type.Set));
+                    case "zset" -> e.getValue().getChildren().add(0, new RedisIcon(RedisIcon.Type.Zset));
+                    case "list" -> e.getValue().getChildren().add(0, new RedisIcon(RedisIcon.Type.List));
+                }
+//                e.getValue().getChildren().add(0, new RedisIcon(RedisIcon.Type.String));
             } else {
                 freshLeafIcon(e);
             }
@@ -140,6 +157,7 @@ public class RedisKeyTreeView extends TreeView<Pane> {
             if (!found) {
                 // 没有找到对应的子节点，创建一个新的节点
                 Label label = new Label(parts[i]);
+                // 不在这里进行key图标的渲染，因为后续可能会有新的孩子节点添加到该节点
                 RedisIcon redisIcon = new RedisIcon(RedisIcon.Type.Folder);
                 HBox hBox = new HBox(redisIcon, label);
                 hBox.setAlignment(Pos.CENTER_LEFT);

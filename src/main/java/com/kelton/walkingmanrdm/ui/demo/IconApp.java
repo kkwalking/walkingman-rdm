@@ -1,16 +1,10 @@
 package com.kelton.walkingmanrdm.ui.demo;
 
-import com.kelton.walkingmanrdm.ui.svg.MyIcon;
-import com.kelton.walkingmanrdm.ui.svg.RedisIcon;
+import com.kelton.walkingmanrdm.ui.icon.RedisIcon;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import org.kordamp.ikonli.boxicons.BoxiconsRegular;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
  * @Author zhouzekun

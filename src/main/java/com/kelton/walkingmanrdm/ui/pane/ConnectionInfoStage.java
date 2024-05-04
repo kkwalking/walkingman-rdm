@@ -1,28 +1,23 @@
-package com.kelton.walkingmanrdm.ui.component;
+package com.kelton.walkingmanrdm.ui.pane;
 
 import cn.hutool.core.util.StrUtil;
-import com.kelton.walkingmanrdm.common.util.SqlUtils;
 import com.kelton.walkingmanrdm.core.model.RedisConnectInfoProp;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.ConnectionService;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
+import com.kelton.walkingmanrdm.ui.global.GlobalObjectPool;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
-import java.util.Objects;
 
 /**
  * @Author zhouzekun
@@ -44,6 +39,10 @@ public class ConnectionInfoStage extends Stage {
     private Label promptLabel;
 
     private boolean promptIsPlay;
+
+    private static final double WIDTH = 300;
+
+    private static final double HEIGHT = 300;
 
 
     public ConnectionInfoStage(RedisConnectInfoProp connectionInfo) {
@@ -73,6 +72,7 @@ public class ConnectionInfoStage extends Stage {
 
         // 中间连接信息区域
         VBox middlePane = new VBox(20);
+        middlePane.getStyleClass().add("middlePane");
 
         this.nameField = new TextField();
         nameField.setPromptText("connection name");
@@ -134,11 +134,16 @@ public class ConnectionInfoStage extends Stage {
 
         // 底部按钮区域
         Button connectBtn = new Button("测试连接");
+        connectBtn.getStyleClass().add("connectBtn");
         Button saveBtn = new Button("保存");
+        saveBtn.getStyleClass().add("saveBtn");
+        Button closeBtn = new Button("关闭");
+        closeBtn.getStyleClass().add("closeBtn");
         Region spacingReg = new Region();
-        HBox bottomHBox = new HBox(connectBtn,spacingReg, saveBtn);
+        HBox bottomHBox = new HBox(connectBtn,spacingReg, closeBtn, saveBtn);
+        bottomHBox.setSpacing(10);
         HBox.setHgrow(spacingReg, Priority.ALWAYS);
-        bottomHBox.setPadding(new Insets(0,30,15,30));
+        bottomHBox.setPadding(new Insets(0,20,15,20));
         bottomHBox.setAlignment(Pos.CENTER);
 
         // 在按钮上方添加提示Label
@@ -148,15 +153,16 @@ public class ConnectionInfoStage extends Stage {
 
         // 将控件添加到布局容器
         VBox layout = new VBox(10); // 10为元素间的间距
+        layout.getStyleClass().add("container");
         layout.getChildren().addAll(middlePane , buttonAndPromptLayout);
         layout.setAlignment(Pos.CENTER);
 
-        // 设置并显示窗口
-        Scene scene = new Scene(layout, 300, 250); // 这里设置新窗口的大小
+
+        //  Color.TRANSPARENT可以设置scene背景为透明
+        Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.TRANSPARENT); // 这里设置新窗口的大小
         this.setScene(scene);
         this.setTitle("New Connection Info");
-        this.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/img/logo.png")).toExternalForm()));
-
+        scene.getStylesheets().add(this.getClass().getResource("/css/connectionInfoStage.css").toExternalForm());
 //        点击事件处理
         saveBtn.setOnMouseClicked(event -> {
 
@@ -168,6 +174,14 @@ public class ConnectionInfoStage extends Stage {
                 saveConnInfo(connInfo);
                 this.close();
             }
+            RootStackPane rootForPrimaryStage = (RootStackPane) ((Stage) GlobalObjectPool.getBy(GlobalObjectPool.PRIMARY_STAGE)).getScene().getRoot();
+            rootForPrimaryStage.removeMaskLayout();
+        });
+
+        closeBtn.setOnMouseClicked( e-> {
+            this.close();
+            RootStackPane rootForPrimaryStage = (RootStackPane) ((Stage) GlobalObjectPool.getBy(GlobalObjectPool.PRIMARY_STAGE)).getScene().getRoot();
+            rootForPrimaryStage.removeMaskLayout();
         });
         connectBtn.setOnMouseClicked( event -> {
             RedisConnectionInfo connInfo = createConnInfo();
@@ -178,6 +192,16 @@ public class ConnectionInfoStage extends Stage {
                 testConnInfo(connInfo);
             }
         });
+
+
+        initStyle(StageStyle.TRANSPARENT); // 用来移除窗口装饰
+
+        // 计算显示居中位置
+        Stage primaryStage = (Stage)GlobalObjectPool.getBy(GlobalObjectPool.PRIMARY_STAGE);
+        double X = (primaryStage.getWidth() - WIDTH) / 2 + primaryStage.getX();
+        double Y = (primaryStage.getHeight() - HEIGHT) / 2 + primaryStage.getY();
+        this.setX(X);
+        this.setY(Y);
     }
 
     /**

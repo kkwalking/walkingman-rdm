@@ -1,0 +1,49 @@
+.container {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-border-width: 0px;
+    -fx-border-radius: 10px;
+}
+
+.text-field {
+    -fx-border-color: #EAECF0; /* 被选中时的边框颜色设置为#009688 */
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-background-color: transparent;
+}
+.text-field:focused {
+    -fx-border-color: #009688; /* 被选中时的边框颜色设置为#009688 */
+    -fx-focus-color: #009688; /* 焦点颜色设置 */
+}
+
+.connectBtn {
+    -fx-background-color: transparent;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+    -fx-border-color: #EAECF0;
+}
+.connectBtn:hover {
+    -fx-border-color: #009688;
+}
+
+.saveBtn {
+    -fx-background-color: #009688;
+    -fx-text-fill: white;
+    -fx-border-radius: 5px;
+    -fx-border-width: 0px;
+}
+.saveBtn:hover {
+    -fx-background-color: #036C5F;
+}
+
+.closeBtn {
+    -fx-background-color: transparent;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+    -fx-border-color: #EAECF0;
+}
+.closeBtn:hover {
+    -fx-border-color: #036C5F;
+}
+

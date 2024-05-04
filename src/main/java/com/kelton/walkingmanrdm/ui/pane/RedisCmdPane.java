@@ -1,4 +1,4 @@
-package com.kelton.walkingmanrdm.ui.component;
+package com.kelton.walkingmanrdm.ui.pane;
 
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;

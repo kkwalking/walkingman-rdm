@@ -6,10 +6,29 @@
 
 }
 
+.newBtn {
+    -fx-background-color: white;
+    -fx-background-color: transparent;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+    /*-fx-border-color: rgba(100, 112, 109, 0.81);*/
+    -fx-border-color: #E4EFED;
+    -fx-text-fill: black;
+}
+.newBtn:hover {
+    -fx-border-color: #036C5F;
+    -fx-text-fill: #036C5F;
+}
+
+.newBtn:hover .ikonli-font-icon {
+    -fx-icon-color: #036C5F;
+}
+
 /*间隔条纹效果*/
 .list-cell-odd {
     -fx-background-color: #ffffff; /* 白色背景 */
 }
+
 .list-cell-even {
     -fx-background-color: rgba(244, 244, 244, 0.5); /* 淡灰色背景 */
 }
@@ -28,17 +47,19 @@
 }
 
 /*选中的背景*/
-.list-cell:selected{
+.list-cell:selected {
     -fx-background-color: #CCE8E2;
 }
+
 /*选中的文本颜色*/
-.list-cell:selected .label{
+.list-cell:selected .label {
     -fx-text-fill: black;
 }
 
-.list-cell:hover{
+.list-cell:hover {
     -fx-background-color: #E4EFED;
 }
+
 /* 为同时处于hover和selected状态的单元格定义样式 */
 .list-cell:hover:selected {
     -fx-background-color: #CCE8E2;
@@ -57,14 +78,14 @@
 
 .edit-btn:hover {
     -fx-background-color: #72b6ad;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
 }
 
 .edit-btn:hover .ikonli-font-icon {
     -fx-icon-color: black;
 }
 
-.list-cell:selected .edit-btn .ikonli-font-icon{
+.list-cell:selected .edit-btn .ikonli-font-icon {
     -fx-icon-color: black;
 }
 
@@ -81,14 +102,14 @@
 
 .del-btn:hover {
     -fx-background-color: #72b6ad;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
 }
 
 .del-btn:hover .ikonli-font-icon {
     -fx-icon-color: black;
 }
 
-.list-cell:selected .del-btn .ikonli-font-icon{
+.list-cell:selected .del-btn .ikonli-font-icon {
     -fx-icon-color: black;
 }
 

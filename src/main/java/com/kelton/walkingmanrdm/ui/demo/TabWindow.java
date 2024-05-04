@@ -1,7 +1,7 @@
 package com.kelton.walkingmanrdm.ui.demo;
 
 import com.kelton.walkingmanrdm.common.util.SqlUtils;
-import com.kelton.walkingmanrdm.ui.component.MainPane;
+import com.kelton.walkingmanrdm.ui.pane.HomePane;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
@@ -24,8 +24,8 @@ public class TabWindow extends Application {
 
         // 主窗口标签页
         Tab homeTab = new Tab("主窗口");
-        MainPane mainPane = new MainPane(tabPane);
-        homeTab.setContent(mainPane);
+        HomePane homePane = new HomePane(tabPane);
+        homeTab.setContent(homePane);
         homeTab.setClosable(false);
 
         // 将标签页添加到TabPane中

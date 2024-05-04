@@ -4,14 +4,18 @@ import com.kelton.walkingmanrdm.core.model.RedisConnectInfoProp;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.ConnectionService;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
+import com.kelton.walkingmanrdm.ui.global.GlobalObjectPool;
+import com.kelton.walkingmanrdm.ui.pane.ConnectionInfoStage;
+import com.kelton.walkingmanrdm.ui.pane.RedisOperaPane;
+import com.kelton.walkingmanrdm.ui.pane.RootStackPane;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
 import org.kordamp.ikonli.antdesignicons.AntDesignIconsFilled;
 import org.kordamp.ikonli.boxicons.BoxiconsRegular;
-import org.kordamp.ikonli.coreui.CoreUiBrands;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
@@ -104,6 +108,9 @@ public class RedisConnectionCell extends ListCell<RedisConnectInfoProp> {
 
     private void editConnection(RedisConnectInfoProp connection) {
         ConnectionInfoStage connectionInfoStage = new ConnectionInfoStage(connection);
+        // 为主窗口添加遮罩层
+        RootStackPane root = (RootStackPane) ((Stage) GlobalObjectPool.getBy(GlobalObjectPool.PRIMARY_STAGE)).getScene().getRoot();
+        root.addMaskLayout();
         connectionInfoStage.show();
         connectionInfoStage.setOnHidden(event -> {
             getListView().refresh();

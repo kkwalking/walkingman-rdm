@@ -1,20 +1,21 @@
-package com.kelton.walkingmanrdm.ui.component;
+package com.kelton.walkingmanrdm.ui.pane;
 
 import com.kelton.walkingmanrdm.core.model.RedisConnectInfoProp;
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.ConnectionService;
-import com.kelton.walkingmanrdm.ui.component.ConnectionInfoStage;
-import com.kelton.walkingmanrdm.ui.component.RedisConnectionCell;
-import javafx.application.Application;
+import com.kelton.walkingmanrdm.ui.component.ConnectionListView;
+import com.kelton.walkingmanrdm.ui.global.GlobalObjectPool;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
+import org.kordamp.ikonli.carbonicons.CarbonIcons;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ import java.util.List;
  * @Author zhouzekun
  * @Date 2024/4/26 9:45
  */
-public class MainPane extends BorderPane {
+public class HomePane extends BorderPane {
 
     public static final double CELL_HEIGHT = 30.0;
 
@@ -35,7 +36,7 @@ public class MainPane extends BorderPane {
 
     private TabPane tabPane;
 
-    public MainPane(TabPane tabPane) {
+    public HomePane(TabPane tabPane) {
         super();
         this.tabPane = tabPane;
         header = createHeader(); // 创建header区域
@@ -48,25 +49,31 @@ public class MainPane extends BorderPane {
     private HBox createHeader() {
         HBox header = new HBox();
         header.setPadding(new Insets(30));
-        Button newBtn = new Button("+ 新增连接");
+        Button newBtn = new Button("新增连接");
+        newBtn.getStyleClass().add("newBtn");
+        FontIcon colorIcon = new FontIcon(CarbonIcons.ADD);
+        colorIcon.setIconSize(20);
+        newBtn.setGraphic(colorIcon);
         newBtn.setOnAction(event -> {
             // 实现打开一个对话框来添加新的Redis连接，并保存到数据库
             ConnectionInfoStage connectionInfoStage = new ConnectionInfoStage();
             // 设置为模态窗口
             connectionInfoStage.initOwner(this.getScene().getWindow()); // 获取当前主窗口作为父窗口
             connectionInfoStage.initModality(Modality.APPLICATION_MODAL); // 设置模态类型
+            RootStackPane root = (RootStackPane) ((Stage) GlobalObjectPool.getBy(GlobalObjectPool.PRIMARY_STAGE)).getScene().getRoot();
+            root.addMaskLayout();
 
             connectionInfoStage.showAndWait(); // 显示模态窗口并等待关闭前不允许用户交互
             refreshConnectionInfoList();
         });
         newBtn.setPrefSize(100,30);
-        newBtn.setStyle("-fx-background-color:#009688;-fx-text-fill: white;-fx-font-size: 15;");
-        newBtn.setOnMouseEntered(e-> {
-            newBtn.setStyle("-fx-background-color:#036c5f;-fx-text-fill: white;-fx-font-size: 15;");
-        });
-        newBtn.setOnMouseExited(e-> {
-            newBtn.setStyle("-fx-background-color:#009688;-fx-text-fill: white;-fx-font-size: 15;");
-        });
+//        newBtn.setStyle("-fx-background-color:#009688;-fx-text-fill: white;-fx-font-size: 15;");
+//        newBtn.setOnMouseEntered(e-> {
+//            newBtn.setStyle("-fx-background-color:#036c5f;-fx-text-fill: white;-fx-font-size: 15;");
+//        });
+//        newBtn.setOnMouseExited(e-> {
+//            newBtn.setStyle("-fx-background-color:#009688;-fx-text-fill: white;-fx-font-size: 15;");
+//        });
 
         Region spaceReg = new Region();
         HBox.setHgrow(spaceReg, Priority.ALWAYS);

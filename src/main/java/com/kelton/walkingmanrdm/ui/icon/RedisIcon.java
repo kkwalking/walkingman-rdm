@@ -1,6 +1,5 @@
-package com.kelton.walkingmanrdm.ui.svg;
+package com.kelton.walkingmanrdm.ui.icon;
 
-import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -23,12 +22,12 @@ public class RedisIcon extends StackPane{
         setPrefSize(size, size);
         setMaxSize(size, size);
         switch (type) {
-            case Folder -> icon.setIconCode(MyIcon.REDIS_FOLDER);
-            case String -> icon.setIconCode(MyIcon.REDIS_STRING);
-            case Set -> icon.setIconCode(MyIcon.REDIS_SET);
-            case Hash -> icon.setIconCode(MyIcon.REDIS_HASH);
-            case List -> icon.setIconCode(MyIcon.REDIS_LIST);
-            case Zset -> icon.setIconCode(MyIcon.REDIS_ZSET);
+            case Folder -> icon.setIconCode(RedisDataStructIcon.REDIS_FOLDER);
+            case String -> icon.setIconCode(RedisDataStructIcon.REDIS_STRING);
+            case Set -> icon.setIconCode(RedisDataStructIcon.REDIS_SET);
+            case Hash -> icon.setIconCode(RedisDataStructIcon.REDIS_HASH);
+            case List -> icon.setIconCode(RedisDataStructIcon.REDIS_LIST);
+            case Zset -> icon.setIconCode(RedisDataStructIcon.REDIS_ZSET);
         }
 
         deactive();

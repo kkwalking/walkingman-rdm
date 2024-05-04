@@ -1,24 +1,15 @@
 package com.kelton.walkingmanrdm.ui.component;
 
-import com.kelton.walkingmanrdm.ui.svg.MsgIcon;
-import com.kelton.walkingmanrdm.ui.svg.MyLevelHandler;
+import com.kelton.walkingmanrdm.ui.icon.MsgIcon;
 import javafx.animation.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.SVGPath;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
-
-import java.security.Key;
 
 public class NotificationManager {
 

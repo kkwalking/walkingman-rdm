@@ -1,12 +1,11 @@
-package com.kelton.walkingmanrdm.ui.component;
+package com.kelton.walkingmanrdm.ui.pane;
 
 import com.kelton.walkingmanrdm.core.model.RedisConnectionInfo;
 import com.kelton.walkingmanrdm.core.service.RedisBasicCommand;
 import com.kelton.walkingmanrdm.core.service.RedisStringCommand;
+import com.kelton.walkingmanrdm.ui.component.RedisKeyTreeView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
@@ -26,7 +25,7 @@ import java.util.Set;
  */
 public class RedisOperaPane extends BorderPane {
 
-    private TextArea valueTextArea;
+    private RedisDetailPane detailPane;
 
 
     private List<VBox> tabList = new ArrayList<>(2);
@@ -40,9 +39,8 @@ public class RedisOperaPane extends BorderPane {
         super();
         this.connectionInfo = connectionInfo;
         VBox sidebar = createTab();
-        sidebar.setPrefWidth(80);
-        sidebar.setStyle("-fx-background-color: #F2F2F2;");
-
+        sidebar.getStyleClass().add("sidebar");
+//        sidebar.setPrefWidth(80);
         setLeft(sidebar);
 
         // redis 操作面板
@@ -161,23 +159,22 @@ public class RedisOperaPane extends BorderPane {
     }
 
     private HBox createRedisMainPane(RedisConnectionInfo connectionInfo) {
+        RedisDetailPaneContainer detailPaneContainer = new RedisDetailPaneContainer(connectionInfo);
+        detailPaneContainer.setPrefSize(300,300);
         // redis主操作面板
         Set<String> keys = RedisBasicCommand.INSTANT.keys(connectionInfo, "*");
-        RedisKeyTreeView treeView =  new RedisKeyTreeView(keys, key -> {
-            String value = RedisStringCommand.INSTANT.get(connectionInfo, key);
-            valueTextArea.setText(value);
-        });
 
-        valueTextArea = new TextArea();
-        valueTextArea.setEditable(false);
-        valueTextArea.setWrapText(true);
+
+        RedisKeyTreeView treeView =  new RedisKeyTreeView(connectionInfo, keys,
+                detailPaneContainer::showPane); // 传入双击item的回调事件
+
 
         treeView.setPrefWidth(200);
         treeView.setMinWidth(150);
 
-        HBox.setHgrow(valueTextArea, Priority.ALWAYS);  // 设置TextArea占据剩余空间
+        HBox.setHgrow(detailPaneContainer, Priority.ALWAYS);  // 设置TextArea占据剩余空间
 
-        HBox redisMainPane = new HBox(treeView, valueTextArea);
+        HBox redisMainPane = new HBox(treeView, detailPaneContainer);
         HBox.setHgrow(redisMainPane, Priority.ALWAYS);
 
         return redisMainPane;

@@ -1,4 +1,4 @@
-package com.kelton.walkingmanrdm.ui.svg;
+package com.kelton.walkingmanrdm.ui.icon;
 
 
 import org.kordamp.ikonli.Ikon;
@@ -7,7 +7,7 @@ import org.kordamp.ikonli.Ikon;
  * @Author zhouzekun
  * @Date 2024/4/29 14:12
  */
-public enum MyIcon implements Ikon {
+public enum RedisDataStructIcon implements Ikon {
 
 
     REDIS_FOLDER("myicon-folder", '\ue900'),
@@ -24,7 +24,7 @@ public enum MyIcon implements Ikon {
 
     private int code;
 
-    MyIcon(String description, int code) {
+    RedisDataStructIcon(String description, int code) {
         this.description = description;
         this.code = code;
     }
@@ -40,8 +40,8 @@ public enum MyIcon implements Ikon {
     }
 
 
-    public static MyIcon getByDescription(String description) {
-        for (MyIcon icon : values()) {
+    public static RedisDataStructIcon getByDescription(String description) {
+        for (RedisDataStructIcon icon : values()) {
             if (icon.description.equals(description)) {
                 return icon;
             }

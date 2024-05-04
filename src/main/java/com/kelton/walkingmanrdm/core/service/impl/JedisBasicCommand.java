@@ -34,17 +34,13 @@ public class JedisBasicCommand implements RedisBasicCommand {
             if (StrUtil.isNotBlank(connectionInfo.password())) {
                 jedis.auth(connectionInfo.password());
             }
-            jedis.connect();
-        } catch (Exception e) {
-            if (e instanceof JedisConnectionException) {
-                System.out.println("连接redis失败");
-                return false;
+            if("PONG".equals(jedis.ping())) {
+                return true;
             }
-            System.out.println("其他异常");
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-            return false;
         }
-        return true;
+        return false;
     }
 
     @Override

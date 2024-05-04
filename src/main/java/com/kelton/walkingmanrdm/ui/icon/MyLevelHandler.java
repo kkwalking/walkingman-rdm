@@ -1,4 +1,4 @@
-package com.kelton.walkingmanrdm.ui.svg;
+package com.kelton.walkingmanrdm.ui.icon;
 
 import org.kordamp.ikonli.AbstractIkonHandler;
 import org.kordamp.ikonli.Ikon;
